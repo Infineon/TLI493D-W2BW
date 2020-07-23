@@ -1,28 +1,28 @@
 /**
-* For basic setup just create a Tle493d() object. If you want to use the wake up mode please use Tle493d_w2b6(). Also
+* For basic setup just create a Tli493d() object. If you want to use the wake up mode please use Tli493d_w2b6(). Also
 * the setUpdateRate() method is slightly different for different variants
 */
 
 
-#include <Tle493d.h>
+#include <Tli493d.h>
 
-Tle493d Tle493dMagnetic3DSensor = Tle493d();
+Tli493d Tli493dMagnetic3DSensor = Tli493d();
 
 void setup() {
   Serial.begin(9600);
   while (!Serial);
-  Tle493dMagnetic3DSensor.begin();
-  Tle493dMagnetic3DSensor.enableTemp();
+  Tli493dMagnetic3DSensor.begin();
+  Tli493dMagnetic3DSensor.enableTemp();
 }
 
 void loop() {
-  Tle493dMagnetic3DSensor.updateData();
+  Tli493dMagnetic3DSensor.updateData();
 
-  Serial.print(Tle493dMagnetic3DSensor.getX());
+  Serial.print(Tli493dMagnetic3DSensor.getX());
   Serial.print(" ; ");
-  Serial.print(Tle493dMagnetic3DSensor.getY());
+  Serial.print(Tli493dMagnetic3DSensor.getY());
   Serial.print(" ; ");
-  Serial.println(Tle493dMagnetic3DSensor.getZ());
+  Serial.println(Tli493dMagnetic3DSensor.getZ());
   
   delay(500);
 }

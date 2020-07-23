@@ -1,30 +1,30 @@
 /**
-* For basic setup just create a Tle493d() object. If you want to use the wake up mode please use Tle493d_w2b6(). Also
+* For basic setup just create a Tli493d() object. If you want to use the wake up mode please use Tli493d_w2b6(). Also
 * the setUpdateRate() method is slightly different for different variants
 */
 
 
-#include <Tle493d.h>
+#include <Tli493d.h>
 
-Tle493d Tle493dMagnetic3DSensor = Tle493d();
+Tli493d Tli493dMagnetic3DSensor = Tli493d();
 
 void setup() {
   Serial.begin(9600);
   while (!Serial);
-  Tle493dMagnetic3DSensor.begin();
-  Tle493dMagnetic3DSensor.enableTemp();
+  Tli493dMagnetic3DSensor.begin();
+  Tli493dMagnetic3DSensor.enableTemp();
 }
 
 void loop() {
-  Tle493dMagnetic3DSensor.updateData();
+  Tli493dMagnetic3DSensor.updateData();
   int spe =0; //Speed =0
-  double z = Tle493dMagnetic3DSensor.getZ(); 
+  double z = Tli493dMagnetic3DSensor.getZ(); 
   // Serial.println("_________________________________");
   // Serial.println("                     ");
   int zSign = z < 0 ? -1 : 1; //zSign: sign of the perpendicular z- component of the magnet. is used to make the magnet orientation regardless/no meaning
   z = z * zSign; //change sign of speed if needed
-  double x = Tle493dMagnetic3DSensor.getX(); /* *zSign */
-  double y = Tle493dMagnetic3DSensor.getY();  /* *zSign */
+  double x = Tli493dMagnetic3DSensor.getX(); /* *zSign */
+  double y = Tli493dMagnetic3DSensor.getY();  /* *zSign */
   double sp = -1;
   int sp_int=-1;
   int count=0;

@@ -1,10 +1,8 @@
 /**
- *  @page The Arduino Library for Infineon's Magnetic 3D Sensor TLE493D-W2B6
+ *  @page The Arduino Library for Infineon's Magnetic 3D Sensor TLI493D-W2BW
  *  @section introduction Introduction
- * 	The TLE493D-W2B6 sensor family comes with I2C interface and wake-up function. This sensor family TLE493D offers
+ * 	The TLI493D-W2B6 sensor family comes with I2C interface and wake-up function. This sensor family TLI493D offers
  * 	accurate three dimensional sensing with extremely low-power consumption.
- *
- *  @image latex "TLE493DW2B6.jpg"
  *
  *	@section main_features Main Features
  *
@@ -34,30 +32,30 @@
  *	range, so that interrupts are generated only when relevant data are available.
  */
 
-#ifndef TLE493D_H_INCLUDED
-#define TLE493D_H_INCLUDED
+#ifndef TLI493D_H_INCLUDED
+#define TLI493D_H_INCLUDED
 
 #include <Arduino.h>
 #include <Wire.h>
 #include "./util/BusInterface.h"
-#include "./util/Tle493d_conf.h"
+#include "./util/Tli493d_conf.h"
 
-typedef enum Tle493d_Error
+typedef enum Tli493d_Error
 {
-	TLE493D_NO_ERROR = 0,
-	TLE493D_BUS_ERROR = 1,
-	TLE493D_FRAME_ERROR = 2
-} Tle493d_Error_t;
+	TLI493D_NO_ERROR = 0,
+	TLI493D_BUS_ERROR = 1,
+	TLI493D_FRAME_ERROR = 2
+} Tli493d_Error_t;
 
-class Tle493d
+class Tli493d
 {
   public:
 	enum TypeAddress_e
 	{
-		TLE493D_A0 = 0x35,
-		TLE493D_A1 = 0x22,
-		TLE493D_A2 = 0x78,
-		TLE493D_A3 = 0x44
+		TLI493D_A0 = 0x35,
+		TLI493D_A1 = 0x22,
+		TLI493D_A2 = 0x78,
+		TLI493D_A3 = 0x44
 	};
 
 	/**
@@ -91,13 +89,13 @@ class Tle493d
 	 * @param mode Operating mode of the sensor; default is the master controlled mode
 	 * @param productType The library supports product types from A0 to A3; default is type A0
 	 */
-	Tle493d(AccessMode_e mode = MASTERCONTROLLEDMODE,
-			TypeAddress_e productType = TLE493D_A0);
+	Tli493d(AccessMode_e mode = MASTERCONTROLLEDMODE,
+			TypeAddress_e productType = TLI493D_A0);
 
 	/**
 	 * @brief Destructor
 	 */
-	~Tle493d(void);
+	~Tli493d(void);
 	/**
 	 * @brief Starts the sensor
 	 */
@@ -106,7 +104,7 @@ class Tle493d
 	/**
 	 * @brief Starts the sensor
 	 * @param bus The I2C bus
-	 * @param slaveAddress The 7-bit slave address as defined in @ref Tle493d_Type
+	 * @param slaveAddress The 7-bit slave address as defined in @ref Tli493d_Type
 	 * @param reset If a reset should be initiated before starting the sensor
 	 * @param oneByteRead If one-byte read protocol should be used. Otherwise the two-byte protocol is available
 	 */
@@ -122,11 +120,38 @@ class Tle493d
 	 * @brief Disables temperature measurement to reduce power consumption
 	 */
 	void disableTemp(void);
+	
+	/**
+	 * @brief The Wake Up threshold range disabling /INT pulses between upper threshold and lower threshold is limited
+	 *  	  to a window of the half output range. Here the adjustable range can be set with a ratio of size [-1,1]
+	 * 		  When all the measurement values Bx, By and Bz are within this range INT is disabled.
+	 * 		  If the arguments are out of range or any upper threshold is smaller than the lower one, the function
+	 * 		  returns without taking effect.
+	 * @param xh Upper threshold in x direction
+	 * @param xl Lower threshold in x direction
+	 * @param yh Upper threshold in y direction
+	 * @param yl Lower threshold in y direction
+	 * @param zh Upper threshold in z direction
+	 * @param zl Lower threshold in z direction
+	 */
+    void setWakeUpThreshold(float xh, float xl, float yh, float yl, float zh,
+                            float zl);
+
+    /**
+	 * @brief Checks if WA bit is set. When not interrupt configuration is as specified by the CA and INT bits.
+	 */
+    bool wakeUpEnabled(void);
+
+    /**
+	 * @brief Sets the update rate in low power mode
+	 * @param updateRate Update rate which is an unsigned integer from the 0 (the fastest) to 7 (the highest)
+	 */
+    void setUpdateRate(uint8_t updateRate);
 
 	/**
 	 * @brief Reads measurement results from sensor
 	 */
-	Tle493d_Error updateData(void);
+	Tli493d_Error updateData(void);
 
 	/**
 	 * @return the Cartesian x-coordinate
@@ -170,7 +195,7 @@ class Tle493d
 	void readDiagnosis(uint8_t (&diag)[7]);
 
   protected:
-	tle493d::BusInterface_t mInterface;
+	tli493d::BusInterface_t mInterface;
 	/**
 	 * @brief Stores new values into the bus interface; for this function to take effect the function writeOut() should be called afterwards
 	 * @param Register mask index as defined in @ref Registers_e
@@ -223,4 +248,4 @@ class Tle493d
 	int16_t concatResults(uint8_t upperByte, uint8_t lowerByte, bool isB);
 };
 
-#endif /* TLE493D_H_INCLUDED */
+#endif /* TLI493D_H_INCLUDED */

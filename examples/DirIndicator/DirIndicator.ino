@@ -1,4 +1,4 @@
-#include <Tle493d.h>
+#include <Tli493d.h>
 
 /*Hysteresis Settings for Phi
  * e.g.: Lower Hysteresis Threshold at 3/7 of value and Higher Threshold at 5/7:
@@ -25,7 +25,7 @@ volatile double xrPosThr = 0;
 volatile double xrNegThr = 0;
 int curPoint = 9;
 
-Tle493d sensor = Tle493d();
+Tli493d sensor = Tli493d();
 
 void setup() {
   // put your setup code here, to run once:

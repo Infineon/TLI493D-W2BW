@@ -34,7 +34,7 @@ getTemp	KEYWORD2
 # Instances (KEYWORD2)
 #######################################
 
-Tle493d	KEYWORD2
+Tli493d	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
