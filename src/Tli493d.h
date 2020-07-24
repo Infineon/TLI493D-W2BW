@@ -40,6 +40,8 @@
 #include "./util/BusInterface.h"
 #include "./util/Tli493d_conf.h"
 
+#define NO_POWER_PIN -1
+
 typedef enum Tli493d_Error
 {
 	TLI493D_NO_ERROR = 0,
@@ -90,6 +92,18 @@ class Tli493d
 	 * @param productType The library supports product types from A0 to A3; default is type A0
 	 */
 	Tli493d(AccessMode_e mode = MASTERCONTROLLEDMODE,
+			TypeAddress_e productType = TLI493D_A0,
+			int resetPin = NO_POWER_PIN,
+			bool powerLevel = HIGH);
+	
+	/**
+	 * @brief Constructor of the sensor class.
+	 * @param mode Operating mode of the sensor; default is the master controlled mode
+	 * @param productType The library supports product types from A0 to A3; default is type A0
+	 */
+	Tli493d(int resetPin = NO_POWER_PIN, 
+			bool powerLevel = HIGH, 
+			AccessMode_e mode = MASTERCONTROLLEDMODE,
 			TypeAddress_e productType = TLI493D_A0);
 
 	/**
@@ -100,6 +114,11 @@ class Tli493d
 	 * @brief Starts the sensor
 	 */
 	void begin(void);
+	
+	/**
+	 * @brief Starts the sensor
+	 */
+	void begin(bool);
 
 	/**
 	 * @brief Starts the sensor
@@ -212,6 +231,8 @@ class Tli493d
   private:
 	const TypeAddress_e mProductType;
 	AccessMode_e mMode;
+	int mPowerPin;
+	bool mPowerLevel;
 	int16_t mXdata;
 	int16_t mYdata;
 	int16_t mZdata;

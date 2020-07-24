@@ -13,7 +13,15 @@
 #include "./util/BusInterface2.h"
 #include <math.h>
 
-Tli493d::Tli493d(AccessMode_e mode, TypeAddress_e productType) : mMode(mode), mProductType(productType)
+Tli493d::Tli493d(AccessMode_e mode, TypeAddress_e productType, int powerPin, bool powerLevel) : mMode(mode), mProductType(productType), mPowerPin(powerPin), mPowerLevel(powerLevel)
+{
+	mXdata = 0;
+	mYdata = 0;
+	mZdata = 0;
+	mTempdata = 0;
+}
+
+Tli493d::Tli493d(int powerPin, bool powerLevel, AccessMode_e mode, TypeAddress_e productType) : mMode(mode), mProductType(productType), mPowerPin(powerPin), mPowerLevel(powerLevel)
 {
 	mXdata = 0;
 	mYdata = 0;
@@ -31,12 +39,19 @@ void Tli493d::begin(void)
 	begin(Wire, mProductType, FALSE, 1);
 }
 
+void Tli493d::begin(bool reset)
+{
+	begin(Wire, mProductType, reset, 1);
+}
+
 void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_t oneByteRead)
 {
-	//TURN ON THE SENSOR
-	pinMode(LED2, OUTPUT);
-	digitalWrite(LED2, HIGH);
-	delay(50);
+	if(mPowerPin != NO_POWER_PIN)
+	{
+		//TURN ON THE SENSOR
+		pinMode(mPowerPin, OUTPUT);
+		digitalWrite(mPowerPin, mPowerLevel);
+	}
 	initInterface(&mInterface, &bus, slaveAddress, tli493d::resetValues);
 	mInterface.bus->begin();
 	if (reset)
@@ -277,22 +292,25 @@ float Tli493d::getPolar(void)
 */
 void Tli493d::resetSensor()
 {
-	//TODO: tli493d-w2b6 freezes after being reset
-	// mInterface.bus->begin();
-	// mInterface.bus->write(0xFF);
-	// mInterface.bus->end();
-
-	// mInterface.bus->begin();
-	// mInterface.bus->write(0xFF);
-	// mInterface.bus->end();
-
-	// mInterface.bus->begin();
-	// mInterface.bus->write(0x00);
-	// mInterface.bus->end();
-
-	// mInterface.bus->begin();
-	// mInterface.bus->write(0x00);
-	// mInterface.bus->end();
+	if(mPowerPin == NO_POWER_PIN)
+	{
+		Wire.requestFrom(0xFF, 0);
+		Wire.requestFrom(0xFF, 0);
+		Wire.beginTransmission(0x00);
+		Wire.endTransmission();
+		Wire.beginTransmission(0x00);
+		Wire.endTransmission();
+		//If the uC has problems with this sequence: reset Wire-module.
+		Wire.end();
+		Wire.begin();
+	}
+	else
+	{
+		pinMode(mPowerPin, OUTPUT);
+		digitalWrite(mPowerPin, !mPowerLevel);	//Switch Sensor off
+		delay(10);
+		digitalWrite(mPowerPin, mPowerLevel);	//Switch Sensor on
+	}
 
 	delayMicroseconds(TLI493D_RESETDELAY);
 }
