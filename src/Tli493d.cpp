@@ -52,24 +52,9 @@ void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_
 		pinMode(mPowerPin, OUTPUT);
 		digitalWrite(mPowerPin, mPowerLevel);
 	}
+	delay(100);
 	initInterface(&mInterface, &bus, slaveAddress, tli493d::resetValues);
-	mInterface.bus->begin();
-	if (reset)
-	{
-		resetSensor();
-	}
-
-	//1-byte protocol -> PR = 1
-	setRegBits(tli493d::PR, oneByteRead);
-	 //disable interrupt
-	setRegBits(tli493d::INT, 1);
-	calcParity(tli493d::FP);
-	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
-	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
-
-	// get all register data from sensor
-	tli493d::readOut(&mInterface);
-
+	
 	//correct reset values for other product types
 	switch (mProductType)
 	{
@@ -85,6 +70,23 @@ void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_
 	default:
 		break;
 	}
+	
+	mInterface.bus->begin();
+	if (reset)
+	{
+		resetSensor();
+	}
+
+	//1-byte protocol -> PR = 1
+	setRegBits(tli493d::PR, oneByteRead);
+	 //disable interrupt
+	//setRegBits(tli493d::INT, 1);
+	calcParity(tli493d::FP);
+	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
+	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
+
+	// get all register data from sensor
+	tli493d::readOut(&mInterface);
 
 	// default: master controlled mode
 	setAccessMode(mMode);
@@ -308,8 +310,11 @@ void Tli493d::resetSensor()
 	{
 		pinMode(mPowerPin, OUTPUT);
 		digitalWrite(mPowerPin, !mPowerLevel);	//Switch Sensor off
-		delay(10);
+		delay(100);
 		digitalWrite(mPowerPin, mPowerLevel);	//Switch Sensor on
+		//If the uC has problems with this sequence: reset Wire-module.
+		Wire.end();
+		Wire.begin();
 	}
 
 	delayMicroseconds(TLI493D_RESETDELAY);
@@ -364,7 +369,7 @@ void Tli493d::calcParity(uint8_t regMaskIndex)
 	if (regMaskIndex == tli493d::FP)
 	{
 		y ^= mInterface.regData[17];
-		y ^= (mInterface.regData[19] << 5); //upper 3 bits
+		y ^= (mInterface.regData[19] >> 5); //upper 3 bits
 	}
 	else if (regMaskIndex == tli493d::CP)
 	{

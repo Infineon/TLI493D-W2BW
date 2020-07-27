@@ -101,7 +101,7 @@ class Tli493d
 	 * @param mode Operating mode of the sensor; default is the master controlled mode
 	 * @param productType The library supports product types from A0 to A3; default is type A0
 	 */
-	Tli493d(int resetPin = NO_POWER_PIN, 
+	Tli493d(int resetPin, 
 			bool powerLevel = HIGH, 
 			AccessMode_e mode = MASTERCONTROLLEDMODE,
 			TypeAddress_e productType = TLI493D_A0);
