@@ -106,56 +106,13 @@ void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_
 
 bool Tli493d::setAccessMode(AccessMode_e mode)
 {
-	bool ret = BUS_OK;
-
-	switch (mode)
-	{
-	case MASTERCONTROLLEDMODE:
-		setRegBits(tli493d::MODE, MASTERCONTROLLEDMODE);
-		// in master cotrolled mode TRIG has to be set
-		// if PR = 0 (2-byte read protocol these bits have no effect)
-		setRegBits(tli493d::TRIG, 1); //trigger on read of address 00h, set to 2 or 3 to trigger on read of 06h
-		break;
-	case FASTMODE:
-		setRegBits(tli493d::MODE, FASTMODE);
-		setRegBits(tli493d::WA, 1);
-		setRegBits(tli493d::WU, 1);
-		setRegBits(tli493d::XH2, 0x7);
-		setRegBits(tli493d::XL2, 0x0);
-		tli493d::writeOut(&mInterface, tli493d::WAKEUP_REGISTER);
-
-		//User manual recommands INT=0 in fast mode however only disabling INT works
-		setRegBits(tli493d::INT, 1);
-		//no clock stretching (INT=1 & CA=0) in fast mode
-		setRegBits(tli493d::CA, 1);
-		setRegBits(tli493d::TRIG, 0);
-
-		break;
-
-	case LOWPOWERMODE:
-		//for wake up mode T must be 0, CP must be odd, and CF = 1
-		setRegBits(tli493d::WA, 0x1);
-		setRegBits(tli493d::WU, 0x1);
-		setRegBits(tli493d::XH2, 0x7);
-		setRegBits(tli493d::XL2, 0x0);
-		tli493d::writeOut(&mInterface, tli493d::WAKEUP_REGISTER);
-
-		//set update rate: fastest is 000b, slowest 111b
-		setRegBits(tli493d::PRD, 0);
-		tli493d::writeOut(&mInterface, tli493d::MOD2_REGISTER);
-
-		//INT must be disabled
-		setRegBits(tli493d::CA, 0);
-		setRegBits(tli493d::INT, 1);
-		setRegBits(tli493d::MODE, LOWPOWERMODE);
-		break;
-	}
-
-	if (ret != BUS_ERROR)
-	{
-		mMode = mode;
-	}
-	return ret;
+	if (mode == 2 || mode > 3)
+		return false;
+	
+	setRegBits(tli493d::MODE, mode);
+	calcParity(tli493d::FP);
+	
+	return tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER) ==  TLI493D_NO_ERROR;
 }
 
 void Tli493d::enableInterrupt(void)
@@ -207,9 +164,16 @@ void Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl
 		zh_th>1 || zl_th<-1 || zl_th>zh_th)
 		return;
 
-	int16_t xh = TLI493D_MAX_THRESHOLD * xh_th; int16_t xl = TLI493D_MAX_THRESHOLD * xl_th;
-	int16_t yh = TLI493D_MAX_THRESHOLD * yh_th; int16_t yl = TLI493D_MAX_THRESHOLD * yl_th;
-	int16_t zh = TLI493D_MAX_THRESHOLD * zh_th; int16_t zl = TLI493D_MAX_THRESHOLD * zl_th;
+	int16_t xh = (float)(TLI493D_MAX_THRESHOLD * xh_th); int16_t xl = (float)(((float)TLI493D_MAX_THRESHOLD) * xl_th);
+	int16_t yh = (int16_t)((float)((float)TLI493D_MAX_THRESHOLD * yh_th)); int16_t yl = (float)TLI493D_MAX_THRESHOLD * yl_th;
+	int16_t zh = (float)TLI493D_MAX_THRESHOLD * zh_th; int16_t zl = (float)TLI493D_MAX_THRESHOLD * zl_th;
+	
+	Serial.println(xh);
+	Serial.println(xl);
+	Serial.println(yh);
+	Serial.println(yl);
+	Serial.println(zh);
+	Serial.println(zl);
 
 	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
 	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
@@ -227,6 +191,7 @@ void Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl
 
 bool Tli493d::wakeUpEnabled(void){
 	//TODO not returning the correct value even when wake up is enabled
+	tli493d::readOut(&mInterface);
 	return (bool)getRegBits(tli493d::WA);
 }
 
@@ -234,7 +199,32 @@ bool Tli493d::wakeUpEnabled(void){
 void Tli493d::setUpdateRate(uint8_t updateRate){
 	if(updateRate>7) updateRate = 7;
 	setRegBits(tli493d::PRD, updateRate);
+	calcParity(tli493d::FP);
 	tli493d::writeOut(&mInterface, 0x13);
+}
+
+bool setMeasurementRange(uint8_t range) {
+	if(range == 2 || range > 3)
+		return false;
+	uint8_t x2 = range & 0x01;
+	uint8_t x4 = range & 0x02;
+	setRegBits(tli493d::X2, x2);
+	calcParity(tli493d::CP);
+	if(tli493d::writeOut(&mInterface, CONFIG_REGISTER) != TLI493D_NO_ERROR)
+		return false;
+	
+	setRegBits(tli493d::X4, x4);
+	if(tli493d::writeOut(&mInterface, CONFIG2_REGISTER) != TLI493D_NO_ERROR)
+		return false;
+	
+	switch(range)
+	{
+		case FULL:			mBMult = TLI493D_B_MULT_FULL; break;
+		case SHORT:			mBMult = TLI493D_B_MULT_X2; break;
+		case EXTRASHORT:	mBMult = TLI493D_B_MULT_X4; break;
+	}
+	
+	return true;
 }
 
 Tli493d_Error_t Tli493d::updateData(void)
@@ -256,17 +246,17 @@ Tli493d_Error_t Tli493d::updateData(void)
 
 float Tli493d::getX(void)
 {
-	return static_cast<float>(mXdata) * TLI493D_B_MULT;
+	return static_cast<float>(mXdata) * mBMult;
 }
 
 float Tli493d::getY(void)
 {
-	return static_cast<float>(mYdata) * TLI493D_B_MULT;
+	return static_cast<float>(mYdata) * mBMult;
 }
 
 float Tli493d::getZ(void)
 {
-	return static_cast<float>(mZdata) * TLI493D_B_MULT;
+	return static_cast<float>(mZdata) * mBMult;
 }
 
 float Tli493d::getTemp(void)
@@ -276,7 +266,7 @@ float Tli493d::getTemp(void)
 
 float Tli493d::getNorm(void)
 {
-	return TLI493D_B_MULT * sqrt(pow(static_cast<float>(mXdata), 2) + pow(static_cast<float>(mYdata), 2) + pow(static_cast<float>(mZdata), 2));
+	return mBMult * sqrt(pow(static_cast<float>(mXdata), 2) + pow(static_cast<float>(mYdata), 2) + pow(static_cast<float>(mZdata), 2));
 }
 
 float Tli493d::getAzimuth(void)
@@ -296,15 +286,15 @@ void Tli493d::resetSensor()
 {
 	if(mPowerPin == NO_POWER_PIN)
 	{
-		Wire.requestFrom(0xFF, 0);
-		Wire.requestFrom(0xFF, 0);
-		Wire.beginTransmission(0x00);
-		Wire.endTransmission();
-		Wire.beginTransmission(0x00);
-		Wire.endTransmission();
-		//If the uC has problems with this sequence: reset Wire-module.
-		Wire.end();
-		Wire.begin();
+		mInterface.bus->requestFrom(0xFF, 0);
+		mInterface.bus->requestFrom(0xFF, 0);
+		mInterface.bus->beginTransmission(0x00);
+		mInterface.bus->endTransmission();
+		mInterface.bus->beginTransmission(0x00);
+		mInterface.bus->endTransmission();
+		//If the uC has problems with this sequence: reset TwoWire-module.
+		mInterface.bus->end();
+		mInterface.bus->begin();
 	}
 	else
 	{
@@ -312,9 +302,9 @@ void Tli493d::resetSensor()
 		digitalWrite(mPowerPin, !mPowerLevel);	//Switch Sensor off
 		delay(100);
 		digitalWrite(mPowerPin, mPowerLevel);	//Switch Sensor on
-		//If the uC has problems with this sequence: reset Wire-module.
-		Wire.end();
-		Wire.begin();
+		//If the uC has problems with this sequence: reset TwoWire-module.
+		mInterface.bus->end();
+		mInterface.bus->begin();
 	}
 
 	delayMicroseconds(TLI493D_RESETDELAY);

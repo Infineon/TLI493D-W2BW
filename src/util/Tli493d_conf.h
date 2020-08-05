@@ -16,15 +16,17 @@
 #define TLI493D_STARTUPDELAY		60
 #define TLI493D_RESETDELAY			30
 
-#define TLI493D_NUM_OF_REGMASKS		50
+#define TLI493D_NUM_OF_REGMASKS		51
 #define TLI493D_NUM_OF_ACCMODES		4
 #define TLI493D_MSB_MASK			0x07F1
 #define TLI493D_LSB_MASK			0x07
 #define TLI493D_MAX_THRESHOLD		1023
 #define TLI493D_MEASUREMENT_READOUT	7
 
-#define TLI493D_B_MULT 				0.13
-#define TLI493D_B_MULT_LOW			2.08 //for 8 bit resolution
+#define TLI493D_B_MULT_FULL			1f/7.7f
+#define TLI493D_B_MULT_X2			1f/15.4f
+#define TLI493D_B_MULT_X4			1f/30.8f
+#define TLI493D_B_MULT_FULL_LOW		2.08 //for 8 bit resolution
 #define TLI493D_TEMP_MULT 			0.24 //range 0.21 to 0.27
 #define TLI493D_TEMP_MULT_LOW 		3.84 //for 8 bit resolution
 #define TLI493D_TEMP_OFFSET 		1180 //range 1000 to 1360
@@ -61,7 +63,7 @@ enum Registers_e
 	FP, IICadr, PR, CA, INT, MODE,	//MOD1
 	Res12,
 	PRD, Res13,						//MOD2
-	Res14,
+	Res14, X2						//Config2
 	Res15, 
 	Ver,
 };
@@ -72,6 +74,7 @@ enum RegisterAddr_e
 	CONFIG_REGISTER = 0x10,
 	MOD1_REGISTER = 0x11,
 	MOD2_REGISTER = 0x13,
+	CONFIG2_REGISTER = 0x14
 };
 
 const RegMask_t regMasks[] = {
@@ -132,7 +135,11 @@ const RegMask_t regMasks[] = {
 	{ REGMASK_WRITE, 18, 0xFF, 0 }, 	// Res12
 	{ REGMASK_WRITE, 19, 0xE0, 5 }, 	// PRD 
 	{ REGMASK_WRITE, 19, 0x1F, 0 }, 	// RES13
-	{ REGMASK_WRITE, 20, 0xFF, 0 }, 	// Res14
+	
+	// CONFIG2
+	{ REGMASK_WRITE, 20, 0xFE, 0 }, 	// Res14
+	{ REGMASK_WRITE, 20, 0x01, 0 },		// X4
+	
 	{ REGMASK_WRITE, 21, 0xFF, 0 }, 	// Res15
 	
 	{ REGMASK_READ, 22, 0xFF, 0 }, 		// Version 

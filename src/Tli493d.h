@@ -79,10 +79,24 @@ class Tli493d
 	 *		 In master controlled mode the sensor powered down if when it is not triggered. This library configures to ADC start before sending first MSB of data registers
 	 *		 In fast mode the measurements and ADC-conversions are running continuously.
 	 */
+	 
+	enum Range_e
+	{
+		FULL = 0,
+		SHORT = 1,
+		EXTRASHORT = 3,
+	};
+	/**
+	 * @enum Range_e Enumerates the three available ranges; number 2 is reserved
+	 *		The full range is from -160mT to 160mT with a sensitivity of 7.7 LSB/mT.
+	 *		The short range is from -100mT to 100mT with a sensitivity of 15.4 LSB/mT.
+	 *		The extra short range is from -50mT to 50mT with a sensitivity of 30.8 LSB/mT. This is a special feature of the W2BW type.
+	 */
 
 	/**
 	 * @brief Sets the operating mode of the sensor
 	 * @param mode MASTERCONTROLLEDMODE,LOWPOWERMODE or FASTMODE, default is MASTERCONTROLLEDMODE
+	 * @return true if configuration was successfull, otherwise false
 	 */
 	bool setAccessMode(AccessMode_e mode);
 
@@ -166,6 +180,13 @@ class Tli493d
 	 * @param updateRate Update rate which is an unsigned integer from the 0 (the fastest) to 7 (the highest)
 	 */
     void setUpdateRate(uint8_t updateRate);
+	
+	/**
+	 * @brief Sets the magnetic range that can be measured. The smaller the range, the higher the sensitivity.
+	 * @param range FULL, SHORT or EXTRASHORT, default is FULL.
+	 * @return true if configuration was successfull, otherwise false.
+	 */
+	bool setMeasurementRange(uint8_t range);
 
 	/**
 	 * @brief Reads measurement results from sensor
@@ -212,6 +233,27 @@ class Tli493d
 	void resetSensor(void);
 
 	void readDiagnosis(uint8_t (&diag)[7]);
+	
+		/**
+	 * @brief Enables interrupts
+	 */
+	void enableInterrupt(void);
+
+	/**
+	 * @brief Disables interrupts; Sensor read-out suppressed during ongoing ADC conversion
+	 */
+	void disableInterrupt(void);
+
+	/**
+	 * @brief Enables collision avoidance (clock stretching)
+	 */
+	void enableCollisionAvoidance(void);
+
+	/**
+	 * @brief Disables collision avoidance; readouts may collide with ADC conversion
+	 */
+	void disableCollisionAvoidance(void);
+
 
   protected:
 	tli493d::BusInterface_t mInterface;
@@ -237,26 +279,7 @@ class Tli493d
 	int16_t mYdata;
 	int16_t mZdata;
 	int16_t mTempdata;
-
-	/**
-	 * @brief Enables interrupts
-	 */
-	void enableInterrupt(void);
-
-	/**
-	 * @brief Disables interrupts; Sensor read-out suppressed during ongoing ADC conversion
-	 */
-	void disableInterrupt(void);
-
-	/**
-	 * @brief Enables collision avoidance (clock stretching)
-	 */
-	void enableCollisionAvoidance(void);
-
-	/**
-	 * @brief Disables collision avoidance; readouts may collide with ADC conversion
-	 */
-	void disableCollisionAvoidance(void);
+	float mBMult = TLI493D_B_MULT_FULL;
 
 	/**
 	 * @brief Sets FP (fuse parity) and CP (configuration parity)
