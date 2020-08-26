@@ -149,7 +149,7 @@ class Tli493d
 	 * @brief Sets when new measurements are triggered in MASTERCONTROLLEDMODE
 	 * @param trigger: 0 = no measurements, 1 = measurements on read before first MSB, 2 = measurements on read after register 0x05
 	 */
-	void Tli493d::setTrigger(uint8_t trigger);
+	void setTrigger(uint8_t trigger);
 	
 	/**
 	 * @brief Enables temperature measurement; by default already enabled
@@ -166,21 +166,69 @@ class Tli493d
 	 *  	  to a window of the half output range. Here the adjustable range can be set with a ratio of size [-1,1]
 	 * 		  When all the measurement values Bx, By and Bz are within this range INT is disabled.
 	 * 		  If the arguments are out of range or any upper threshold is smaller than the lower one, the function
-	 * 		  returns without taking effect.
-	 * @param xh Upper threshold in x direction
-	 * @param xl Lower threshold in x direction
-	 * @param yh Upper threshold in y direction
-	 * @param yl Lower threshold in y direction
-	 * @param zh Upper threshold in z direction
-	 * @param zl Lower threshold in z direction
+	 * 		  returns false without taking effect.
+	 * 		  If any of the ranges xh-xl, yh-yl or zh-zl is greater than half output range, false will be returned even thought the values are written to the wake-up regeisters.
+	 * @param xh Upper threshold in x direction [-1,1]
+	 * @param xl Lower threshold in x direction [-1,1]
+	 * @param yh Upper threshold in y direction [-1,1]
+	 * @param yl Lower threshold in y direction [-1,1]
+	 * @param zh Upper threshold in z direction [-1,1]
+	 * @param zl Lower threshold in z direction [-1,1]
+	 * @return true if configuration was successfull and interrupts will be sent, otherwise false.
 	 */
-    void setWakeUpThreshold(float xh, float xl, float yh, float yl, float zh,
+    bool setWakeUpThreshold(float xh, float xl, float yh, float yl, float zh,
+                            float zl);
+							
+	/**
+	 * @brief The Wake Up threshold range disabling /INT pulses between upper threshold and lower threshold is limited
+	 *  	  to a window of the half output range. Here the adjustable range can be set in LSB [-2048,2047].
+	 * 		  When all the measurement values Bx, By and Bz are within this range INT is disabled.
+	 * 		  If the arguments are out of range or any upper threshold is smaller than the lower one, the function
+	 * 		  returns false without taking effect.
+	 * 		  If any of the ranges xh-xl, yh-yl or zh-zl is greater than half output range, false will be returned, even thought the values are written to the wake-up regeisters.
+	 * @param xh Upper threshold in x direction [-2048,2047]
+	 * @param xl Lower threshold in x direction [-2048,2047]
+	 * @param yh Upper threshold in y direction [-2048,2047]
+	 * @param yl Lower threshold in y direction [-2048,2047]
+	 * @param zh Upper threshold in z direction [-2048,2047]
+	 * @param zl Lower threshold in z direction [-2048,2047]
+	 * @return true if configuration was successfull and interrupts will be sent, otherwise false.
+	 */
+    bool setWakeUpThresholdLSB(int16_t xh, int16_t xl, int16_t yh, int16_t yl, int16_t zh,
+                            int16_t zl);
+							
+	/**
+	 * @brief The Wake Up threshold range disabling /INT pulses between upper threshold and lower threshold is limited
+	 *  	  to a window of the half output range. Here the adjustable range can be set in mT.
+	 * 		  When all the measurement values Bx, By and Bz are within this range INT is disabled.
+	 * 		  If the arguments are out of range or any upper threshold is smaller than the lower one, the function
+	 * 		  returns false without taking effect.
+	 * 		  If any of the ranges xh-xl, yh-yl or zh-zl is greater than half output range, false will be returned, even thought the values are written to the wake-up regeisters.
+	 * @param xh Upper threshold in x direction in mT
+	 * @param xl Lower threshold in x direction in mT
+	 * @param yh Upper threshold in y direction in mT
+	 * @param yl Lower threshold in y direction in mT
+	 * @param zh Upper threshold in z direction in mT
+	 * @param zl Lower threshold in z direction in mT
+	 * @return true if configuration was successfull and interrupts will be sent, otherwise false.
+	 */
+    bool setWakeUpThresholdMT(float xh, float xl, float yh, float yl, float zh,
                             float zl);
 
     /**
 	 * @brief Checks if WA bit is set. When not interrupt configuration is as specified by the CA and INT bits.
 	 */
     bool wakeUpEnabled(void);
+	
+	/**
+	 * @brief Enables the Wake Up functionality of the sensor.
+	 */
+    void enableWakeUp(void);
+	
+	/**
+	 * @brief Disables the Wake Up functionality of the sensor.
+	 */
+    void disableWakeUp(void);
 
     /**
 	 * @brief Sets the update rate in low power mode

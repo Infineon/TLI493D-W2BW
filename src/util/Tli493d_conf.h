@@ -18,9 +18,9 @@
 
 #define TLI493D_NUM_OF_REGMASKS		51
 #define TLI493D_NUM_OF_ACCMODES		4
-#define TLI493D_MSB_MASK			0x07F1
-#define TLI493D_LSB_MASK			0x07
-#define TLI493D_MAX_THRESHOLD		1023
+#define TLI493D_MSB_MASK			0x07F8
+#define TLI493D_LSB_MASK			0x0007
+#define TLI493D_MAX_WU_THR			2048
 #define TLI493D_MEASUREMENT_READOUT	7
 
 #define TLI493D_B_MULT_FULL			1.0/7.7
@@ -108,11 +108,11 @@ const RegMask_t regMasks[] = {
 	{ REGMASK_WRITE, 13, 0x38, 3},		// XH2 (LSB)
 	{ REGMASK_WRITE, 13, 0x07, 0},		// XL2
 	
-	{ REGMASK_WRITE, 14, 0xA0, 6 }, 	// TST 
+	{ REGMASK_WRITE, 14, 0xC0, 6 }, 	// TST 
 	{ REGMASK_WRITE, 14, 0x38, 3 }, 	// YH2
 	{ REGMASK_WRITE, 14, 0x07, 0 }, 	// YL2 
 	
-	{ REGMASK_WRITE, 15, 0xA0, 6 }, 	// PH 
+	{ REGMASK_WRITE, 15, 0xC0, 6 }, 	// PH 
 	{ REGMASK_WRITE, 15, 0x38, 3 }, 	// ZH2 
 	{ REGMASK_WRITE, 15, 0x07, 0 }, 	// ZL2 
 	

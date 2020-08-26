@@ -3,9 +3,6 @@
  *	@author Yuxi Sun
  *	@author Florian Schmidt
  *	@author Severin Neuner
- *	@bug reset sequence freezes the W2B6 sensor, fast mode not working
- *	@bug User manual recommands INT=0 in fast mode however only disabling INT works
- *	@bug wake up mode not configured correctly (WA bit = 0)
  */
 
 #include "Tli493d.h"
@@ -83,7 +80,7 @@ void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_
 	//setRegBits(tli493d::INT, 1);
 	calcParity(tli493d::FP);
 	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
-	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
+	//tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
 
 	// get all register data from sensor
 	tli493d::readOut(&mInterface);
@@ -167,16 +164,28 @@ void Tli493d::disableTemp(void)
 	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
 }
 
-void Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl_th, float zh_th, float zl_th){
+bool Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl_th, float zh_th, float zl_th){
 	//all thresholds should be within [-1,1], upper thresholds should be greater than lower thresholds
 	if(xh_th>1 || xl_th<-1 || xl_th>xh_th ||
 		yh_th>1 || yl_th<-1 || yl_th>yh_th||
 		zh_th>1 || zl_th<-1 || zl_th>zh_th)
-		return;
+		return false;
 
-	int16_t xh = (float)(TLI493D_MAX_THRESHOLD * xh_th); int16_t xl = (float)(((float)TLI493D_MAX_THRESHOLD) * xl_th);
-	int16_t yh = (int16_t)((float)((float)TLI493D_MAX_THRESHOLD * yh_th)); int16_t yl = (float)TLI493D_MAX_THRESHOLD * yl_th;
-	int16_t zh = (float)TLI493D_MAX_THRESHOLD * zh_th; int16_t zl = (float)TLI493D_MAX_THRESHOLD * zl_th;
+	bool ret = true;
+	
+	int16_t xh = (float)TLI493D_MAX_WU_THR * xh_th; int16_t xl = (float)TLI493D_MAX_WU_THR * xl_th;
+	int16_t yh = (float)TLI493D_MAX_WU_THR * yh_th; int16_t yl = (float)TLI493D_MAX_WU_THR * yl_th;
+	int16_t zh = (float)TLI493D_MAX_WU_THR * zh_th; int16_t zl = (float)TLI493D_MAX_WU_THR * zl_th;
+	
+	//If one of the ranges greater than half the value range: return false as warning that /INT is disabled.
+	if(xh - xl > TLI493D_MAX_WU_THR ||
+		yh - yl > TLI493D_MAX_WU_THR ||
+		zh - zl > TLI493D_MAX_WU_THR )
+		ret = false;
+	
+	xh >>= 1; xl >>= 1;
+	yh >>= 1; yl >>= 1;
+	zh >>= 1; zl >>= 1;
 	
 	Serial.println(xh);
 	Serial.println(xl);
@@ -193,10 +202,109 @@ void Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl
 
 	setRegBits(tli493d::ZL, (zl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::ZL2, zl&TLI493D_LSB_MASK);
 	setRegBits(tli493d::ZH, (zh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::ZH2, zh&TLI493D_LSB_MASK);
+	
+	calcParity(tli493d::CP);
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
 
 	//write out registers
 	for(uint8_t i = tli493d::regMasks[tli493d::XL].byteAdress; i<=tli493d::regMasks[tli493d::ZL2].byteAdress; i++)
 		tli493d::writeOut(&mInterface, i);
+}
+
+bool Tli493d::setWakeUpThresholdLSB(int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th){
+	if(xh_th>TLI493D_MAX_WU_THR-1|| xl_th<-TLI493D_MAX_WU_THR || xl_th>xh_th ||
+		yh_th>TLI493D_MAX_WU_THR-1 || yl_th<-TLI493D_MAX_WU_THR || yl_th>yh_th||
+		zh_th>TLI493D_MAX_WU_THR-1 || zl_th<-TLI493D_MAX_WU_THR || zl_th>zh_th)
+		return false;
+		
+	bool ret = true;
+	
+	int16_t xh = xh_th; int16_t xl = xl_th;
+	int16_t yh = yh_th; int16_t yl = yl_th;
+	int16_t zh = zh_th; int16_t zl = zl_th;
+
+	//If one of the ranges greater than half the value range: return false as warning that /INT is disabled.
+	if(xh - xl > TLI493D_MAX_WU_THR ||
+		yh - yl > TLI493D_MAX_WU_THR ||
+		zh - zl > TLI493D_MAX_WU_THR )
+		ret = false;
+	
+	xh >>= 1; xl >>= 1;
+	yh >>= 1; yl >>= 1;
+	zh >>= 1; zl >>= 1;
+	
+	Serial.println(xh);
+	Serial.println(xl);
+	Serial.println(yh);
+	Serial.println(yl);
+	Serial.println(zh);
+	Serial.println(zl);
+
+	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
+	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
+
+	setRegBits(tli493d::YL, (yl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::YL2, yl&TLI493D_LSB_MASK);
+	setRegBits(tli493d::YH, (yh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::YH2, yh&TLI493D_LSB_MASK);
+
+	setRegBits(tli493d::ZL, (zl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::ZL2, zl&TLI493D_LSB_MASK);
+	setRegBits(tli493d::ZH, (zh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::ZH2, zh&TLI493D_LSB_MASK);
+	
+	calcParity(tli493d::CP);
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+
+	//write out registers
+	for(uint8_t i = tli493d::regMasks[tli493d::XL].byteAdress; i<=tli493d::regMasks[tli493d::ZL2].byteAdress; i++)
+		tli493d::writeOut(&mInterface, i);
+	
+	return ret;
+}
+
+bool Tli493d::setWakeUpThresholdMT(float xh_th, float xl_th, float yh_th, float yl_th, float zh_th, float zl_th){
+	if(xh_th>(TLI493D_MAX_WU_THR-1)/mBMult|| xl_th<-TLI493D_MAX_WU_THR/mBMult || xl_th>xh_th ||
+		yh_th>(TLI493D_MAX_WU_THR-1)/mBMult || yl_th<-TLI493D_MAX_WU_THR/mBMult || yl_th>yh_th||
+		zh_th>(TLI493D_MAX_WU_THR-1)/mBMult || zl_th<-TLI493D_MAX_WU_THR/mBMult || zl_th>zh_th)
+		return false;
+
+	bool ret = true;
+	int16_t xh = (int16_t)(xh_th/mBMult); int16_t xl = (int16_t)(xl_th/mBMult);
+	int16_t yh = (int16_t)(yh_th/mBMult); int16_t yl = (int16_t)(yl_th/mBMult);
+	int16_t zh = (int16_t)(zh_th/mBMult); int16_t zl = (int16_t)(zl_th/mBMult);
+	
+	//If one of the ranges greater than half the value range: return false as warning that /INT is disabled.
+	if(xh - xl > TLI493D_MAX_WU_THR ||
+		yh - yl > TLI493D_MAX_WU_THR ||
+		zh - zl > TLI493D_MAX_WU_THR )
+		ret = false;
+	
+	xh >>= 1; xl >>= 1;
+	yh >>= 1; yl >>= 1;
+	zh >>= 1; zl >>= 1;
+	
+	Serial.println(xh);
+	Serial.println(xl);
+	Serial.println(yh);
+	Serial.println(yl);
+	Serial.println(zh);
+	Serial.println(zl);
+
+	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
+	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
+
+	setRegBits(tli493d::YL, (yl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::YL2, yl&TLI493D_LSB_MASK);
+	setRegBits(tli493d::YH, (yh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::YH2, yh&TLI493D_LSB_MASK);
+
+	setRegBits(tli493d::ZL, (zl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::ZL2, zl&TLI493D_LSB_MASK);
+	setRegBits(tli493d::ZH, (zh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::ZH2, zh&TLI493D_LSB_MASK);
+	
+
+	//write out registers
+	for(uint8_t i = tli493d::regMasks[tli493d::XL].byteAdress; i<=tli493d::regMasks[tli493d::ZL2].byteAdress; i++)
+		tli493d::writeOut(&mInterface, i);
+	
+	calcParity(tli493d::CP);
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+	
+	return ret;
 }
 
 bool Tli493d::wakeUpEnabled(void){
@@ -205,12 +313,26 @@ bool Tli493d::wakeUpEnabled(void){
 	return (bool)getRegBits(tli493d::WA);
 }
 
+void Tli493d::enableWakeUp(void){
+	setRegBits(tli493d::WU, 1);
+	calcParity(tli493d::CP);
+	tli493d::writeOut(&mInterface, tli493d::WAKEUP_REGISTER);
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+}
+
+void Tli493d::disableWakeUp(void){
+	setRegBits(tli493d::WU, 0);
+	calcParity(tli493d::CP);
+	tli493d::writeOut(&mInterface, tli493d::WAKEUP_REGISTER);
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+}
 
 void Tli493d::setUpdateRate(uint8_t updateRate){
 	if(updateRate>7) updateRate = 7;
 	setRegBits(tli493d::PRD, updateRate);
 	calcParity(tli493d::FP);
 	tli493d::writeOut(&mInterface, 0x13);
+	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
 }
 
 bool Tli493d::setMeasurementRange(Range_e range) {
