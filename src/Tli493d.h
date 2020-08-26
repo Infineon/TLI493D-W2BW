@@ -93,13 +93,7 @@ class Tli493d
 	 *		The extra short range is from -50mT to 50mT with a sensitivity of 30.8 LSB/mT. This is a special feature of the W2BW type.
 	 */
 
-	/**
-	 * @brief Sets the operating mode of the sensor
-	 * @param mode MASTERCONTROLLEDMODE,LOWPOWERMODE or FASTMODE, default is MASTERCONTROLLEDMODE
-	 * @return true if configuration was successfull, otherwise false
-	 */
-	bool setAccessMode(AccessMode_e mode);
-
+	
 	/**
 	 * @brief Constructor of the sensor class.
 	 * @param mode Operating mode of the sensor; default is the master controlled mode
@@ -145,6 +139,19 @@ class Tli493d
 			   uint8_t oneByteRead);
 
 	/**
+	 * @brief Sets the operating mode of the sensor
+	 * @param mode MASTERCONTROLLEDMODE,LOWPOWERMODE or FASTMODE, default is MASTERCONTROLLEDMODE
+	 * @return true if configuration was successfull, otherwise false
+	 */
+	bool setAccessMode(AccessMode_e mode);
+	
+	/**
+	 * @brief Sets when new measurements are triggered in MASTERCONTROLLEDMODE
+	 * @param trigger: 0 = no measurements, 1 = measurements on read before first MSB, 2 = measurements on read after register 0x05
+	 */
+	void Tli493d::setTrigger(uint8_t trigger);
+	
+	/**
 	 * @brief Enables temperature measurement; by default already enabled
 	 */
 	void enableTemp(void);
@@ -186,7 +193,7 @@ class Tli493d
 	 * @param range FULL, SHORT or EXTRASHORT, default is FULL.
 	 * @return true if configuration was successfull, otherwise false.
 	 */
-	bool setMeasurementRange(uint8_t range);
+	bool setMeasurementRange(Range_e range);
 
 	/**
 	 * @brief Reads measurement results from sensor

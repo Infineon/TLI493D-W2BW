@@ -89,14 +89,15 @@ void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_
 	tli493d::readOut(&mInterface);
 
 	// default: master controlled mode
-	setAccessMode(mMode);
+	setRegBits(tli493d::MODE, mMode);
+	setRegBits(tli493d::TRIG, 1); //trigger on read of address 00h, set to 2 or 3 to trigger on read of 06h; only needed for Master Controlled Mode
 	calcParity(tli493d::CP);
 	calcParity(tli493d::FP);
-
-	//write out the configuration register
-	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+	
 	//write out MOD1 register
 	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
+	//write out the configuration register
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
 
 	// make sure the correct setting is written 
 	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
@@ -113,6 +114,15 @@ bool Tli493d::setAccessMode(AccessMode_e mode)
 	calcParity(tli493d::FP);
 	
 	return tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER) ==  TLI493D_NO_ERROR;
+}
+
+void Tli493d::setTrigger(uint8_t trigger)
+{
+	if(trigger > 3u)
+		return;
+	setRegBits(tli493d::TRIG, trigger);
+	calcParity(tli493d::CP);
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
 }
 
 void Tli493d::enableInterrupt(void)
@@ -203,18 +213,18 @@ void Tli493d::setUpdateRate(uint8_t updateRate){
 	tli493d::writeOut(&mInterface, 0x13);
 }
 
-bool setMeasurementRange(uint8_t range) {
+bool Tli493d::setMeasurementRange(Range_e range) {
 	if(range == 2 || range > 3)
 		return false;
 	uint8_t x2 = range & 0x01;
 	uint8_t x4 = range & 0x02;
 	setRegBits(tli493d::X2, x2);
 	calcParity(tli493d::CP);
-	if(tli493d::writeOut(&mInterface, CONFIG_REGISTER) != TLI493D_NO_ERROR)
+	if(tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER) != TLI493D_NO_ERROR)
 		return false;
 	
 	setRegBits(tli493d::X4, x4);
-	if(tli493d::writeOut(&mInterface, CONFIG2_REGISTER) != TLI493D_NO_ERROR)
+	if(tli493d::writeOut(&mInterface, tli493d::CONFIG2_REGISTER) != TLI493D_NO_ERROR)
 		return false;
 	
 	switch(range)

@@ -23,9 +23,9 @@
 #define TLI493D_MAX_THRESHOLD		1023
 #define TLI493D_MEASUREMENT_READOUT	7
 
-#define TLI493D_B_MULT_FULL			1f/7.7f
-#define TLI493D_B_MULT_X2			1f/15.4f
-#define TLI493D_B_MULT_X4			1f/30.8f
+#define TLI493D_B_MULT_FULL			1.0/7.7
+#define TLI493D_B_MULT_X2			1.0/15.4
+#define TLI493D_B_MULT_X4			1.0/30.8
 #define TLI493D_B_MULT_FULL_LOW		2.08 //for 8 bit resolution
 #define TLI493D_TEMP_MULT 			0.24 //range 0.21 to 0.27
 #define TLI493D_TEMP_MULT_LOW 		3.84 //for 8 bit resolution
@@ -63,7 +63,7 @@ enum Registers_e
 	FP, IICadr, PR, CA, INT, MODE,	//MOD1
 	Res12,
 	PRD, Res13,						//MOD2
-	Res14, X2						//Config2
+	Res14, X4,						//Config2
 	Res15, 
 	Ver,
 };
