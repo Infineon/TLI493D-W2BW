@@ -120,8 +120,8 @@ const RegMask_t regMasks[] = {
 	{ REGMASK_WRITE, 16, 0x80, 7}, 		// DT
 	{ REGMASK_WRITE, 16, 0x40, 6}, 		// AM 
 	{ REGMASK_WRITE, 16, 0x30, 4}, 		// TRIG 
-	{ REGMASK_WRITE, 16, 0x04, 3}, 		// X2
-	{ REGMASK_WRITE, 16, 0x03, 1}, 		// TL_mag
+	{ REGMASK_WRITE, 16, 0x08, 3}, 		// X2
+	{ REGMASK_WRITE, 16, 0x06, 1}, 		// TL_mag
 	{ REGMASK_WRITE, 16, 0x01, 0}, 		// CP 
 	
 	// MOD1
@@ -137,7 +137,7 @@ const RegMask_t regMasks[] = {
 	{ REGMASK_WRITE, 19, 0x1F, 0 }, 	// RES13
 	
 	// CONFIG2
-	{ REGMASK_WRITE, 20, 0xFE, 0 }, 	// Res14
+	{ REGMASK_WRITE, 20, 0xFE, 7 }, 	// Res14
 	{ REGMASK_WRITE, 20, 0x01, 0 },		// X4
 	
 	{ REGMASK_WRITE, 21, 0xFF, 0 }, 	// Res15

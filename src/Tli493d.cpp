@@ -186,13 +186,6 @@ bool Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl
 	xh >>= 1; xl >>= 1;
 	yh >>= 1; yl >>= 1;
 	zh >>= 1; zl >>= 1;
-	
-	Serial.println(xh);
-	Serial.println(xl);
-	Serial.println(yh);
-	Serial.println(yl);
-	Serial.println(zh);
-	Serial.println(zl);
 
 	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
 	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
@@ -232,13 +225,6 @@ bool Tli493d::setWakeUpThresholdLSB(int16_t xh_th, int16_t xl_th, int16_t yh_th,
 	xh >>= 1; xl >>= 1;
 	yh >>= 1; yl >>= 1;
 	zh >>= 1; zl >>= 1;
-	
-	Serial.println(xh);
-	Serial.println(xl);
-	Serial.println(yh);
-	Serial.println(yl);
-	Serial.println(zh);
-	Serial.println(zl);
 
 	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
 	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
@@ -279,13 +265,6 @@ bool Tli493d::setWakeUpThresholdMT(float xh_th, float xl_th, float yh_th, float 
 	xh >>= 1; xl >>= 1;
 	yh >>= 1; yl >>= 1;
 	zh >>= 1; zl >>= 1;
-	
-	Serial.println(xh);
-	Serial.println(xl);
-	Serial.println(yh);
-	Serial.println(yl);
-	Serial.println(zh);
-	Serial.println(zl);
 
 	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
 	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
@@ -308,7 +287,6 @@ bool Tli493d::setWakeUpThresholdMT(float xh_th, float xl_th, float yh_th, float 
 }
 
 bool Tli493d::wakeUpEnabled(void){
-	//TODO not returning the correct value even when wake up is enabled
 	tli493d::readOut(&mInterface);
 	return (bool)getRegBits(tli493d::WA);
 }
@@ -338,8 +316,10 @@ void Tli493d::setUpdateRate(uint8_t updateRate){
 bool Tli493d::setMeasurementRange(Range_e range) {
 	if(range == 2 || range > 3)
 		return false;
+	if(range == EXTRASHORT && getRegBits(tli493d::WA))	//X4 cannot be used together with WakeUp. Please call disableWakeUp() first.
+		return false;
 	uint8_t x2 = range & 0x01;
-	uint8_t x4 = range & 0x02;
+	uint8_t x4 = (range & 0x02)>>1;
 	setRegBits(tli493d::X2, x2);
 	calcParity(tli493d::CP);
 	if(tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER) != TLI493D_NO_ERROR)

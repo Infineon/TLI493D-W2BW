@@ -21,11 +21,10 @@
  *	may occur when the ADC is writing to a register while this is being read out by the microcontroller. When clock stretching
  *	is enabled, the sensor pulls the SCL line down during ongoing ADC conversions, reading of sensor registers or the transmission
  *	of valid ACKs.
+ *  For the W2BW-type clock streching only works, if SCL- and /INT-pins are shorted together, as the sensor uses the output-driver of 
+ *  the /INT-pin to keep the line LOW until measurements are finished.
  *
- *	Two register bits (CA and INT) work together for different configurations. APIs to modify these two bits are not offered
- *	since they have to be set according to different operating modes (master controlled mode, low power mode and fast mode)
- *	for the sensor to work.
- *  
+ *	Two register bits (CA and INT) work together for different configurations.
  *
  *  @subsection wake_up Wake Up Mode
  *	Wake up mode is intended to be used with low power mode or fast mode. This mode disables interrupts within a user-specified
@@ -221,7 +220,11 @@ class Tli493d
     bool wakeUpEnabled(void);
 	
 	/**
-	 * @brief Enables the Wake Up functionality of the sensor.
+	 * @brief Enables the Wake Up functionality of the sensor. Following conditions must be fulfilled:
+	 * 		  - Test modes must be disabled and the T-Bit in Register 0x06 needs to be 0.
+	 *		  - CP parity bit must be odd
+	 *		  - Configuration partiy must be flagged (CF bit in Register 0x06 needs to be 1).
+	 *		  You can check, if the Wake-Up-functionality is activated with the function wakeUpEnabled()
 	 */
     void enableWakeUp(void);
 	
@@ -237,7 +240,9 @@ class Tli493d
     void setUpdateRate(uint8_t updateRate);
 	
 	/**
-	 * @brief Sets the magnetic range that can be measured. The smaller the range, the higher the sensitivity.
+	 * @brief Sets the magnetic range that can be measured. The smaller the range, the higher the sensitivity. 
+	 * 		  Please note: The EXTRASHORT-range enables the T-Bit in Register 0x06 and therefore cannot be used together with the WakeUp-feature.
+						   Before setting the range to EXTRASHORT, the WakeUp needs to be disabled via disableWakeUp(). Otherwise this function will return false without taking effect.
 	 * @param range FULL, SHORT or EXTRASHORT, default is FULL.
 	 * @return true if configuration was successfull, otherwise false.
 	 */

@@ -30,7 +30,10 @@ bool tli493d::readOut(BusInterface_t *interface, uint8_t count)
 	{
 		for (i = 0; i < count; i++)
 		{
-			interface->regData[i] = interface->bus->read();
+			if(i < 0x14 || i > 0x15)	//Skip the "write-only" registers
+				interface->regData[i] = interface->bus->read();
+			else
+				interface->bus->read();
 		}
 		ret = BUS_OK;
 	}
