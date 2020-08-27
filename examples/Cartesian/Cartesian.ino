@@ -6,7 +6,8 @@
 
 #include <Tli493d.h>
 
-Tli493d Tli493dMagnetic3DSensor = Tli493d();
+//Voltage level LOW at pin 5 switches on the sensor VDD
+Tli493d Tli493dMagnetic3DSensor = Tli493d(5,LOW);
 
 void setup() {
   Serial.begin(9600);
@@ -22,7 +23,9 @@ void loop() {
   Serial.print(" ; ");
   Serial.print(Tli493dMagnetic3DSensor.getY());
   Serial.print(" ; ");
-  Serial.println(Tli493dMagnetic3DSensor.getZ());
+  Serial.print(Tli493dMagnetic3DSensor.getZ());
+  Serial.print(" ; ");
+  Serial.println(Tli493dMagnetic3DSensor.getTemp());
   
   delay(500);
 }

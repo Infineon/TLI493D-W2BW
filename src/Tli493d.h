@@ -288,7 +288,6 @@ class Tli493d
 
 	/**
 	 * @brief Resets the sensor
-	 * @bug	not working
 	 */
 	void resetSensor(void);
 
@@ -300,12 +299,13 @@ class Tli493d
 	void enableInterrupt(void);
 
 	/**
-	 * @brief Disables interrupts; Sensor read-out suppressed during ongoing ADC conversion
+	 * @brief Disables interrupts; When Collision Avoidance is activated, Sensor read-outs are suppressed during ongoing ADC conversion (clock stretching)
 	 */
 	void disableInterrupt(void);
 
 	/**
-	 * @brief Enables collision avoidance (clock stretching)
+	 * @brief Enables collision avoidance. When Interrupt is deactivated, clock stretching is active.
+	 * 		  For clock stretching: SCL and INT pins must be shorted.
 	 */
 	void enableCollisionAvoidance(void);
 
