@@ -14,21 +14,37 @@ begin	KEYWORD2
 end	KEYWORD2
 
 setAccessMode	KEYWORD2
+setTrigger		KEYWORD2
 enableInterrupt	KEYWORD2
 disableInterrupt	KEYWORD2
+enableCollisionAvoidance	KEYWORD2
+disableCollisionAvoidance	KEYWORD2
 enableTemp	KEYWORD2
 disableTemp	KEYWORD2
+enableBz	KEYWORD2
+disableBz	KEYWORD2
 
-getMeasurementDelay	KEYWORD2
+setWakeUpThreshold	KEYWORD2
+setWakeUpThresholdMT	KEYWORD2
+setWakeUpThresholdLSB	KEYWORD2
+wakeUpEnabled	KEYWORD2
+enableWakeUp	KEYWORD2
+disableWakeUp	KEYWORD2
+
+setUpdateRate	KEYWORD2
+setMeasurementRange	KEYWORD2
 updateData	KEYWORD2
 
 getX	KEYWORD2
 getY	KEYWORD2
 getZ	KEYWORD2
-getAmount	KEYWORD2
+getNorm	KEYWORD2
 getAzimuth	KEYWORD2
 getPolar	KEYWORD2
 getTemp	KEYWORD2
+
+resetSensor	KEYWORD2
+readDiagnosis	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)
@@ -40,8 +56,16 @@ Tli493d	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-POWERDOWNMODE	LITERAL1
+TLI493D_A0	LITERAL1
+TLI493D_A1	LITERAL1
+TLI493D_A2	LITERAL1
+TLI493D_A3	LITERAL1
+
 FASTMODE	LITERAL1
 LOWPOWERMODE	LITERAL1
 MASTERCONTROLLEDMODE	LITERAL1
+
+FULL	LITERAL1
+SHORT	LITERAL1
+EXTRASHORT	LITERAL1
 
