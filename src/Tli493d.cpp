@@ -3,6 +3,7 @@
  *	@author Yuxi Sun
  *	@author Florian Schmidt
  *	@author Severin Neuner
+ *	@bug Interrupts are not working properly in MasterControlledMode
  */
 
 #include "Tli493d.h"
