@@ -7,12 +7,13 @@
 //Voltage level LOW at pin 5 switches on the sensor VDD; Operating mode is LOWPOWERMODE
 Tli493d Tli493dMagnetic3DSensor = Tli493d(5, LOW, Tli493d::LOWPOWERMODE);
 
-volatile bool interrupt = false;
-
 void setup() {
 	Serial.begin(9600);
 	while (!Serial);
-	Tli493dMagnetic3DSensor.begin();
+	Tli493dMagnetic3DSensor.begin(true);
+
+  //Saving power
+  Tli493dMagnetic3DSensor.disableTemp();
 
 	//The update rate is set to 3 (fastest is 0 and slowest is 7)
 	Tli493dMagnetic3DSensor.setUpdateRate(3);
@@ -33,23 +34,16 @@ void setup() {
 }
 
 void loop() {
-	if(interrupt)
-	{
-		interrupt = false;
-
-		Tli493dMagnetic3DSensor.updateData();
-
-		Serial.print(Tli493dMagnetic3DSensor.getX());
-		Serial.print(" ; ");
-		Serial.print(Tli493dMagnetic3DSensor.getY());
-		Serial.print(" ; ");
-		Serial.println(Tli493dMagnetic3DSensor.getZ());
-
-		delay(10);
-	}
+  //Microcontroller may sleep until interrupt
 }
 
 //This function is called, when the sensor sends an interrupt-pulse.
 void sensor_irq() {
-	interrupt = true;
+	Tli493dMagnetic3DSensor.updateData();
+
+  Serial.print(Tli493dMagnetic3DSensor.getX());
+  Serial.print(" ; ");
+  Serial.print(Tli493dMagnetic3DSensor.getY());
+  Serial.print(" ; ");
+  Serial.println(Tli493dMagnetic3DSensor.getZ());
 }
