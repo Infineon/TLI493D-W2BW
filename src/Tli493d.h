@@ -145,7 +145,7 @@ class Tli493d
 	bool setAccessMode(AccessMode_e mode);
 	
 	/**
-	 * @brief Sets when new measurements are triggered in MASTERCONTROLLEDMODE
+	 * @brief Sets when new measurements are triggered in MASTERCONTROLLEDMODE. If invalid argument or sensor mode is LOWPOWERMODE this function returns without having any effect.
 	 * @param trigger: 0 = no measurements, 1 = measurements on read before first MSB, 2 = measurements on read after register 0x05
 	 */
 	void setTrigger(uint8_t trigger);
@@ -159,6 +159,16 @@ class Tli493d
 	 * @brief Disables temperature measurement to reduce power consumption
 	 */
 	void disableTemp(void);
+	
+	/**
+	 * @brief Enables BZ measurement; by default already enabled
+	 */
+	void enableBz(void);
+
+	/**
+	 * @brief Disables Bz measurement to reduce power consumption. This only works, when temperature measurement is disabled as well.
+	 */
+	void disableBz(void);
 	
 	/**
 	 * @brief The Wake Up threshold range disabling /INT pulses between upper threshold and lower threshold is limited

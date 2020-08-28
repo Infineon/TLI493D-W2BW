@@ -85,16 +85,24 @@ void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_
 	// get all register data from sensor
 	tli493d::readOut(&mInterface);
 
-	// default: master controlled mode
+	// set mode, default: master controlled mode
+	if(mMode == LOWPOWERMODE || mMode == FASTMODE)
+	{
+		setRegBits(tli493d::TRIG, 0);
+	}
+	else
+	{
+		setRegBits(tli493d::TRIG, 1); //trigger on read of address 00h, set to 2 or 3 to trigger on read of 06h; only needed for Master Controlled Mode
+	}
 	setRegBits(tli493d::MODE, mMode);
-	setRegBits(tli493d::TRIG, 1); //trigger on read of address 00h, set to 2 or 3 to trigger on read of 06h; only needed for Master Controlled Mode
 	calcParity(tli493d::CP);
 	calcParity(tli493d::FP);
 	
-	//write out MOD1 register
-	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
+	
 	//write out the configuration register
 	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+	//write out MOD1 register
+	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
 
 	// make sure the correct setting is written 
 	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
@@ -107,19 +115,47 @@ bool Tli493d::setAccessMode(AccessMode_e mode)
 	if (mode == 2 || mode > 3)
 		return false;
 	
+	if(mode == LOWPOWERMODE || mode == FASTMODE)
+	{
+		setRegBits(tli493d::TRIG, 0);
+		calcParity(tli493d::CP);
+		if(tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER) !=  TLI493D_NO_ERROR)
+		{
+			return false;
+		}
+	}
+	else
+	{
+		setRegBits(tli493d::TRIG, 1);
+		calcParity(tli493d::CP);
+		if(tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER) !=  TLI493D_NO_ERROR)
+		{
+			return false;
+		}
+	}
+	
 	setRegBits(tli493d::MODE, mode);
 	calcParity(tli493d::FP);
+	mMode = mode;
 	
 	return tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER) ==  TLI493D_NO_ERROR;
 }
 
 void Tli493d::setTrigger(uint8_t trigger)
 {
-	if(trigger > 3u)
+	if(trigger > 3u || mMode == LOWPOWERMODE)
 		return;
 	setRegBits(tli493d::TRIG, trigger);
 	calcParity(tli493d::CP);
 	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+	
+	tli493d::readOut(&mInterface);
+	for(int i = 0; i < 0x17; i++)
+	{
+		Serial.print(i,HEX);
+		Serial.print(": ");
+		Serial.println(mInterface.regData[i],HEX);
+	}
 }
 
 void Tli493d::enableInterrupt(void)
@@ -164,6 +200,20 @@ void Tli493d::disableTemp(void)
 	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
 }
 
+ void Tli493d::enableBz(void)
+{
+	setRegBits(tli493d::AM, 0);
+	calcParity(tli493d::CP);
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+}
+
+void Tli493d::disableBz(void)
+{
+	setRegBits(tli493d::AM, 1);
+	calcParity(tli493d::CP);
+	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+}
+
 bool Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl_th, float zh_th, float zl_th){
 	//all thresholds should be within [-1,1], upper thresholds should be greater than lower thresholds
 	if(xh_th>1 || xl_th<-1 || xl_th>xh_th ||
@@ -186,6 +236,13 @@ bool Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl
 	xh >>= 1; xl >>= 1;
 	yh >>= 1; yl >>= 1;
 	zh >>= 1; zl >>= 1;
+	
+	//When Temp and Bz measurements are disabled, Y-thresholds must be written to Z-threshold registers
+	if(getRegBits(tli493d::AM)==1 && getRegBits(tli493d::DT) == 1)
+	{
+		zh = yh;
+		zl = yl;
+	}
 
 	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
 	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
@@ -225,6 +282,13 @@ bool Tli493d::setWakeUpThresholdLSB(int16_t xh_th, int16_t xl_th, int16_t yh_th,
 	xh >>= 1; xl >>= 1;
 	yh >>= 1; yl >>= 1;
 	zh >>= 1; zl >>= 1;
+	
+	//When Temp and Bz measurements are disabled, Y-thresholds must be written to Z-threshold registers
+	if(getRegBits(tli493d::AM)==1 && getRegBits(tli493d::DT) == 1)
+	{
+		zh = yh;
+		zl = yl;
+	}
 
 	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
 	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
@@ -265,6 +329,13 @@ bool Tli493d::setWakeUpThresholdMT(float xh_th, float xl_th, float yh_th, float 
 	xh >>= 1; xl >>= 1;
 	yh >>= 1; yl >>= 1;
 	zh >>= 1; zl >>= 1;
+	
+	//When Temp and Bz measurements are disabled, Y-thresholds must be written to Z-threshold registers
+	if(getRegBits(tli493d::AM)==1 && getRegBits(tli493d::DT) == 1)
+	{
+		zh = yh;
+		zl = yl;
+	}
 
 	setRegBits(tli493d::XL, (xl&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XL2, xl&TLI493D_LSB_MASK);
 	setRegBits(tli493d::XH, (xh&TLI493D_MSB_MASK) >> 3); setRegBits(tli493d::XH2, xh&TLI493D_LSB_MASK);
