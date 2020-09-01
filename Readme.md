@@ -1,14 +1,17 @@
 # TLI493D-W2BW Shield2Go
 [![Build Status](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor.svg?branch=master)](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor)
 
-<img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_Shield2Go.png" width="200">
-
-Getting started link: https://www.infineon.com/dgdl/Infineon-TLI493D-W2BW_Shield2Go-GettingStarted-v01_00-EN.pdf?fileId=5546d462737c45b9017395f019797123
+<img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_Shield2Go.png" alt="Shield2Go" width="200">
 
 Arduino library for Infineon's 3D magnetic sensor TLI493D-W2BW. Notice that it is enough to use the class **Tli493d** if you want to use the basic setup. The class **Tli493d-w2bw** offers additional device-specific features. 
 
+Quick starting guide: 
+
+https://www.infineon.com/dgdl/Infineon-TLI493D-W2BW_Shield2Go-GettingStarted-v01_00-EN.pdf?fileId=5546d462737c45b9017395f019797123
+
+
 ## Summary
-The 3D Magnetic Sensor 2GO is a budget-priced evaluation board equipped with the magnetic sensor [TLE493D](https://www.infineon.com/cms/en/product/sensor/magnetic-position-sensor/3d-magnetic-sensor/tle493d-w2b6-a0/) for three dimensional measurement combined with an ARM® Cortex™-M0 CPU. The 3D Magnetic Sensor 2GO has a complete set of on-board devices, including an on-board debugger. Build your own application and gadget with the 3D Magnetic Sensor 2GO.
+The TLI493D-W2BW Shield2Go is a budget-priced evaluation board equipped with the magnetic sensor [TLI493D-W2BW](https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/3d-magnetics/tli493d-w2bw-a0/) for three dimensional magnetic measurements. It is intended to be combined with a [XMC2Go kit](https://www.infineon.com/cms/de/product/evaluation-boards/kit_xmc_2go_xmc1100_v1/).
 
 ## Usage
 Please follow the example sketches in the /examples directory in this library to learn more about the usage of the library.
@@ -44,7 +47,7 @@ mInterface.bus->end();
   This is temporarily solved by twice writing out the configuration registers, in order to avoid unexpected INT pulse.
 
 ## Key Features and Benefits
-* TLE493D-A2B6 and TLE493D-W2B6 (three dimensional magnetic sensor)
+* TLI493D-W2BW (three dimensional magnetic sensor)
 * XMC1100 (ARM® Cortex™-M0 based)
 * On-board J-Link Lite Debugger (Realized with XMC4200 Microcontroller)
 * Power over USB (Micro USB), ESD and reverse current protection
