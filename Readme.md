@@ -2,15 +2,17 @@
 
 [![Build Status](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor.svg?branch=master)](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor)
 
-<img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_Shield2Go.png" height="400">                                                       <img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_sensor.jpg" height="200">
+<img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_sensor.jpg" height="300">
 
-Arduino library for Infineon's 3D magnetic sensor [TLI493D-W2BW](https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/3d-magnetics/tli493d-w2bw-a0/).
+Arduino library for Infineon's wafer level package 3D magnetic sensor [TLI493D-W2BW](https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/3d-magnetics/tli493d-w2bw-a0/).
 
 For a basic board description refer to the [TLI493D-W2BW Shield2Go Quick starting guide](https://www.infineon.com/dgdl/Infineon-TLI493D-W2BW_Shield2Go-GettingStarted-v01_00-EN.pdf?fileId=5546d462737c45b9017395f019797123).
 
 
 ## Summary
 The TLI493D-W2BW Shield2Go is a budget-priced evaluation board equipped with the magnetic sensor [TLI493D-W2BW](https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/3d-magnetics/tli493d-w2bw-a0/) for three dimensional magnetic measurements. It is intended to be combined with a [XMC2Go kit](https://www.infineon.com/cms/de/product/evaluation-boards/kit_xmc_2go_xmc1100_v1/).
+
+## Key features and benefits
 
 ## Usage
 Please follow the example sketches in the /examples directory in this library to learn more about the usage of the library.
@@ -21,6 +23,10 @@ Currently you have to make sure which sensor type you are using. The default typ
 ```
 Tle493d(AccessMode_e mode = MASTERCONTROLLEDMODE, TypeAddress_e productType = TLE493D_A0);
 ```
+
+## Pinout
+<img src=https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_pinout.png height=500>
+
 ### Known Issues
 - Reset sequence not working for TLE493d-W2B6. (Requires further testing)
 ```
