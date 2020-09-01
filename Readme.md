@@ -8,12 +8,31 @@ Arduino library for Infineon's wafer level package 3D magnetic sensor [TLI493D-W
 
 ## TLI493D-W2BW Shield2Go 
 The TLI493D-W2BW sensor comes mounted on the TLI493D-W2BW Shield2Go to provide an easy to use evaluation environment. The Shield2Go can directly be stacked on an [XMC2Go kit](https://www.infineon.com/cms/de/product/evaluation-boards/kit_xmc_2go_xmc1100_v1/) compatible with this library. For a basic board description refer to the [TLI493D-W2BW Shield2Go Quick starting guide](https://www.infineon.com/dgdl/Infineon-TLI493D-W2BW_Shield2Go-GettingStarted-v01_00-EN.pdf?fileId=5546d462737c45b9017395f019797123).
+
 <img src=https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_pinout.png height=500>
 
 ## Summary
-The TLI493D-W2BW Shield2Go is a budget-priced evaluation board equipped with the magnetic sensor [TLI493D-W2BW](https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/3d-magnetics/tli493d-w2bw-a0/) for three dimensional magnetic measurements. 
+The TLI493D-W2BW is a new wafer level package low power 3D magnetic sensor. 
 
-## Key features and benefits
+### Key features
+- 3D (X, Y, Z) magnetic flux density sensing of ±160 mT
+Programmable flux resolution down to typ. 65 µT
+- Extremely small form factor: typ. 1.13 mm * 0.93 mm * 0.59 mm
+- X-Y angular measurement mode
+- Power down mode with 7 nA (typ.) power consumption
+- 12-bit data resolution for each measurement direction plus 10-bit temperature sensor
+- Variable update frequencies and power modes (configurable during operation)
+- Temperature range Tj = -40°C…125°C, supply voltage range = 2.8 V…3.5 V
+- Triggering by external microcontroller possible via I2 C protocol
+- Interrupt signal to indicate a valid measurement to the microcontroller
+
+### Benefits
+- Component reduction due to 3D magnetic measurement principle
+- Small sensor form factor allows for very compact system designs
+- Wide application range addressable due to high flexibility
+- Platform adaptability due to device configurability
+- Very low system power consumption due to Wake-Up mode
+- Disturbance of smaller stray fields are neglectable compared to the high magnetic flux measurement range
 
 ## Usage
 Please follow the example sketches in the /examples directory in this library to learn more about the usage of the library.
