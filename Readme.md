@@ -1,13 +1,12 @@
 # TLI493D-W2BW Shield2Go
+
 [![Build Status](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor.svg?branch=master)](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor)
 
-<img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_Shield2Go.png" alt="Shield2Go" width="200">
+<img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_Shield2Go.png" height="400">                                                       <img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_sensor.jpg" height="200">
 
-Arduino library for Infineon's 3D magnetic sensor TLI493D-W2BW. Notice that it is enough to use the class **Tli493d** if you want to use the basic setup. The class **Tli493d-w2bw** offers additional device-specific features. 
+Arduino library for Infineon's 3D magnetic sensor [TLI493D-W2BW](https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/3d-magnetics/tli493d-w2bw-a0/).
 
-Quick starting guide: 
-
-https://www.infineon.com/dgdl/Infineon-TLI493D-W2BW_Shield2Go-GettingStarted-v01_00-EN.pdf?fileId=5546d462737c45b9017395f019797123
+For a basic board description refer to the [TLI493D-W2BW Shield2Go Quick starting guide](https://www.infineon.com/dgdl/Infineon-TLI493D-W2BW_Shield2Go-GettingStarted-v01_00-EN.pdf?fileId=5546d462737c45b9017395f019797123).
 
 
 ## Summary
@@ -16,11 +15,13 @@ The TLI493D-W2BW Shield2Go is a budget-priced evaluation board equipped with the
 ## Usage
 Please follow the example sketches in the /examples directory in this library to learn more about the usage of the library.
 
+Notice that it is enough to use the class **Tli493d** if you want to use the basic setup. The class **Tli493d-w2bw** offers additional device-specific features. 
+
 Currently you have to make sure which sensor type you are using. The default type is `A0`:
 ```
 Tle493d(AccessMode_e mode = MASTERCONTROLLEDMODE, TypeAddress_e productType = TLE493D_A0);
 ```
-## Known Issues
+### Known Issues
 - Reset sequence not working for TLE493d-W2B6. (Requires further testing)
 ```
 mInterface.bus->begin();
@@ -46,11 +47,6 @@ mInterface.bus->end();
   As mentioned in [this issue](https://github.com/Infineon/TLE493D-3DMagnetic-Sensor/issues/6), the sensor works after being flashed, but not after being powered off and powered on again.
   This is temporarily solved by twice writing out the configuration registers, in order to avoid unexpected INT pulse.
 
-## Key Features and Benefits
-* TLI493D-W2BW (three dimensional magnetic sensor)
-* XMC1100 (ARM® Cortex™-M0 based)
-* On-board J-Link Lite Debugger (Realized with XMC4200 Microcontroller)
-* Power over USB (Micro USB), ESD and reverse current protection
 
 ## Installation
 ### Integration of XMC in Arduino IDE
@@ -67,11 +63,3 @@ To install the 3D magnetic sensor 2GO library in the Arduino IDE, please go now 
 
 ## Processing
 This library supports the open-source software [Processing](https://processing.org/) for creating GUIs. It allows you to connect your evaluation board to a PC over serial communication and visualisation of the embedded system. Find out more on the Arduino homepage [here](http://playground.arduino.cc/Interfacing/Processing). The respective files are stored in the /processing folder of this repository.
-
-## GUI Exe Examples
-
-Download [here](https://github.com/Infineon/TLE493D-3DMagnetic-Sensor/releases/download/untagged-8291dcde7f3b02fb819d/GUI_exe_examples_V1.0.zip) additional examples with graphical interface as executable files. 
-
-## Board Information, Datasheet and Additional Information
-A PDF summarizing the features and layout of the 3D magnetic sensor 2GO board is stored on the Infineon homepage [here](https://www.infineon.com/dgdl/Infineon-3D%20Magnetic%20Sensor-PB-v03_00-EN.pdf?fileId=5546d46261d5e6820161e7571b2b3dd0).
-The datasheet for the TLE493D-W2B6 can be found here [TLE493D-W2B6 Datasheet](https://www.infineon.com/dgdl/Infineon-Infineon-TLE493D-W2B6%20A0-A3%203D%20Magnetic%20Sensor-DS-v01_00-EN.pdf?fileId=5546d46261764359016189ec158943a4) while respective application notes are located here [Application Notes](https://www.infineon.com/cms/en/product/sensor/magnetic-position-sensor/3d-magnetic-sensor/tle493d-w2b6-a0/#!documents).
