@@ -35,41 +35,28 @@ Programmable flux resolution down to typ. 65 µT
 - Disturbance of smaller stray fields are neglectable compared to the high magnetic flux measurement range
 
 ## Usage
-Please follow the example sketches in the /examples directory in this library to learn more about the usage of the library.
-
-Notice that it is enough to use the class **Tli493d** if you want to use the basic setup. The class **Tli493d-w2bw** offers additional device-specific features. 
-
-Currently you have to make sure which sensor type you are using. The default type is `A0`:
+You can specify the sensors operating mode and which sensor type you are using. The default is MASTERCONTROLLEDMODE with type `A0`:
 ```
 Tle493d(AccessMode_e mode = MASTERCONTROLLEDMODE, TypeAddress_e productType = TLE493D_A0);
 ```
-
-### Known Issues
-- Reset sequence not working for TLE493d-W2B6. (Requires further testing)
+If the VDD of the sensor can be controlled by a GPIO of the microcontroller - as it is the case with the Shield2Go - you can specify this pin and its power-on-state. When you do not specify a pin the default is NO_POWER_PIN, if you don't specify a power level, the default is HIGH:
 ```
-mInterface.bus->begin();
-mInterface.bus->write(0xFF);
-mInterface.bus->end();
-
-mInterface.bus->begin();
-mInterface.bus->write(0xFF);
-mInterface.bus->end();
-
-mInterface.bus->begin();
-mInterface.bus->write(0x00);
-mInterface.bus->end();
-
-mInterface.bus->begin();
-mInterface.bus->write(0x00);
-mInterface.bus->end();
+Tle493d(int powerPin = NO_POWER_PIN, bool powerLevel = HIGH);
+```
+When you want to select the accessmode and a power pin, you can use one of the following combined constructors:
+```
+Tli493d(int resetPin, bool powerLevel = HIGH, AccessMode_e mode = MASTERCONTROLLEDMODE, TypeAddress_e productType = TLI493D_A0);
+Tli493d(AccessMode_e mode = MASTERCONTROLLEDMODE, TypeAddress_e productType = TLI493D_A0, int resetPin = NO_POWER_PIN, bool powerLevel = HIGH);
 ```
 
-- TLE493D-A2B6 does not work with low power mode.
-
-- Sensor does not respond after being reconnected.
-  As mentioned in [this issue](https://github.com/Infineon/TLE493D-3DMagnetic-Sensor/issues/6), the sensor works after being flashed, but not after being powered off and powered on again.
-  This is temporarily solved by twice writing out the configuration registers, in order to avoid unexpected INT pulse.
-
+In order to initially configure the sensor and start the communication, you need to use the function _begin()_. Without argument or with the argument **false** the sensor will not be reset at the beginning. This means, if e.g. the temperature measurement was disabled before and you upload a new sketch that does not turn it on explicitly, the temperature measurement will stay inactive. The argument **true** resets the sensor before configuration, so in the previous scenario, the temperature measurement would be enabled afterwards as it is enabled by factory settings.
+```
+begin();
+begin( bool reset );
+```
+After the communication has been setup successfully by the _begin()_-command, the sensor can be configured by different functions. Please follow the example sketches in the /examples directory in this library to learn more about the possible configurations.
+When the configuration was done, the sensor data can be read via _updateData()_.
+Afterwards _getBx()_, _getBy()_, _getBz()_ and _getTemp()_ calculate the magnetic field and temperature out of the raw sensor values.
 
 ## Installation
 ### Integration of XMC in Arduino IDE
