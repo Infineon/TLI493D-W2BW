@@ -1,21 +1,50 @@
-# 3D-Magnetic-Sensor-2GO
+# TLI493D-W2BW - 3D magnetic sensor
+
 [![Build Status](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor.svg?branch=master)](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor)
 
-<img src="https://github.com/Infineon/Assets/blob/master/Pictures/3D%20Magnetic%20Sensor%202Go.jpg">
+<img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_sensor.jpg" height="300">
 
-Library of Infineon's 3D magnetic sensor TLE493D family (currently supporting W2B6 and A2B6) for Arduino. Notice that it is enough to use the class **Tle493d** if you want to use the basic setup. Classes **Tle493d-w2b6** and **Tle493d-a2b6** offers additional device-specific features. 
+Arduino library for Infineon's wafer level package 3D magnetic sensor [TLI493D-W2BW](https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/3d-magnetics/tli493d-w2bw-a0/).
+
+## TLI493D-W2BW Shield2Go 
+The TLI493D-W2BW sensor comes mounted on the [TLI493D-W2BW Shield2Go](https://www.infineon.com/cms/en/product/evaluation-boards/s2go_3d_tli493dw2bw-a0/) to provide an easy to use evaluation environment. The Shield2Go can directly be stacked on an [XMC2Go kit](https://www.infineon.com/cms/de/product/evaluation-boards/kit_xmc_2go_xmc1100_v1/) compatible with this library. For a basic board description refer to the [TLI493D-W2BW Shield2Go Quick starting guide](https://www.infineon.com/dgdl/Infineon-TLI493D-W2BW_Shield2Go-GettingStarted-v01_00-EN.pdf?fileId=5546d462737c45b9017395f019797123).
+
+<img src=https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_pinout.png height=500>
 
 ## Summary
-The 3D Magnetic Sensor 2GO is a budget-priced evaluation board equipped with the magnetic sensor [TLE493D](https://www.infineon.com/cms/en/product/sensor/magnetic-position-sensor/3d-magnetic-sensor/tle493d-w2b6-a0/) for three dimensional measurement combined with an ARM® Cortex™-M0 CPU. The 3D Magnetic Sensor 2GO has a complete set of on-board devices, including an on-board debugger. Build your own application and gadget with the 3D Magnetic Sensor 2GO.
+The TLI493D-W2BW is a new wafer level package low power 3D magnetic sensor. 
+
+### Key features
+- 3D (X, Y, Z) magnetic flux density sensing of ±160 mT
+Programmable flux resolution down to typ. 65 µT
+- Extremely small form factor: typ. 1.13 mm * 0.93 mm * 0.59 mm
+- X-Y angular measurement mode
+- Power down mode with 7 nA (typ.) power consumption
+- 12-bit data resolution for each measurement direction plus 10-bit temperature sensor
+- Variable update frequencies and power modes (configurable during operation)
+- Temperature range Tj = -40°C…125°C, supply voltage range = 2.8 V…3.5 V
+- Triggering by external microcontroller possible via I2 C protocol
+- Interrupt signal to indicate a valid measurement to the microcontroller
+
+### Benefits
+- Component reduction due to 3D magnetic measurement principle
+- Small sensor form factor allows for very compact system designs
+- Wide application range addressable due to high flexibility
+- Platform adaptability due to device configurability
+- Very low system power consumption due to Wake-Up mode
+- Disturbance of smaller stray fields are neglectable compared to the high magnetic flux measurement range
 
 ## Usage
 Please follow the example sketches in the /examples directory in this library to learn more about the usage of the library.
+
+Notice that it is enough to use the class **Tli493d** if you want to use the basic setup. The class **Tli493d-w2bw** offers additional device-specific features. 
 
 Currently you have to make sure which sensor type you are using. The default type is `A0`:
 ```
 Tle493d(AccessMode_e mode = MASTERCONTROLLEDMODE, TypeAddress_e productType = TLE493D_A0);
 ```
-## Known Issues
+
+### Known Issues
 - Reset sequence not working for TLE493d-W2B6. (Requires further testing)
 ```
 mInterface.bus->begin();
@@ -41,11 +70,6 @@ mInterface.bus->end();
   As mentioned in [this issue](https://github.com/Infineon/TLE493D-3DMagnetic-Sensor/issues/6), the sensor works after being flashed, but not after being powered off and powered on again.
   This is temporarily solved by twice writing out the configuration registers, in order to avoid unexpected INT pulse.
 
-## Key Features and Benefits
-* TLE493D-A2B6 and TLE493D-W2B6 (three dimensional magnetic sensor)
-* XMC1100 (ARM® Cortex™-M0 based)
-* On-board J-Link Lite Debugger (Realized with XMC4200 Microcontroller)
-* Power over USB (Micro USB), ESD and reverse current protection
 
 ## Installation
 ### Integration of XMC in Arduino IDE
@@ -62,11 +86,3 @@ To install the 3D magnetic sensor 2GO library in the Arduino IDE, please go now 
 
 ## Processing
 This library supports the open-source software [Processing](https://processing.org/) for creating GUIs. It allows you to connect your evaluation board to a PC over serial communication and visualisation of the embedded system. Find out more on the Arduino homepage [here](http://playground.arduino.cc/Interfacing/Processing). The respective files are stored in the /processing folder of this repository.
-
-## GUI Exe Examples
-
-Download [here](https://github.com/Infineon/TLE493D-3DMagnetic-Sensor/releases/download/untagged-8291dcde7f3b02fb819d/GUI_exe_examples_V1.0.zip) additional examples with graphical interface as executable files. 
-
-## Board Information, Datasheet and Additional Information
-A PDF summarizing the features and layout of the 3D magnetic sensor 2GO board is stored on the Infineon homepage [here](https://www.infineon.com/dgdl/Infineon-3D%20Magnetic%20Sensor-PB-v03_00-EN.pdf?fileId=5546d46261d5e6820161e7571b2b3dd0).
-The datasheet for the TLE493D-W2B6 can be found here [TLE493D-W2B6 Datasheet](https://www.infineon.com/dgdl/Infineon-Infineon-TLE493D-W2B6%20A0-A3%203D%20Magnetic%20Sensor-DS-v01_00-EN.pdf?fileId=5546d46261764359016189ec158943a4) while respective application notes are located here [Application Notes](https://www.infineon.com/cms/en/product/sensor/magnetic-position-sensor/3d-magnetic-sensor/tle493d-w2b6-a0/#!documents).
