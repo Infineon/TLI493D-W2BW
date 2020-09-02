@@ -105,9 +105,9 @@ void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_
 	//write out MOD1 register
 	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
 
-	// make sure the correct setting is written 
-	tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
-	tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
+	// make sure the correct setting is written -> should not be necessary anymore with TLI493D
+	// tli493d::writeOut(&mInterface, tli493d::CONFIG_REGISTER);
+	// tli493d::writeOut(&mInterface, tli493d::MOD1_REGISTER);
 	delay(TLI493D_STARTUPDELAY);
 }
 
@@ -468,28 +468,15 @@ float Tli493d::getPolar(void)
 */
 void Tli493d::resetSensor()
 {
-	if(mPowerPin == NO_POWER_PIN)
-	{
-		mInterface.bus->requestFrom(0xFF, 0);
-		mInterface.bus->requestFrom(0xFF, 0);
-		mInterface.bus->beginTransmission(0x00);
-		mInterface.bus->endTransmission();
-		mInterface.bus->beginTransmission(0x00);
-		mInterface.bus->endTransmission();
-		//If the uC has problems with this sequence: reset TwoWire-module.
-		mInterface.bus->end();
-		mInterface.bus->begin();
-	}
-	else
-	{
-		pinMode(mPowerPin, OUTPUT);
-		digitalWrite(mPowerPin, !mPowerLevel);	//Switch Sensor off
-		delay(100);
-		digitalWrite(mPowerPin, mPowerLevel);	//Switch Sensor on
-		//If the uC has problems with this sequence: reset TwoWire-module.
-		mInterface.bus->end();
-		mInterface.bus->begin();
-	}
+	mInterface.bus->requestFrom(0xFF, 0);
+	mInterface.bus->requestFrom(0xFF, 0);
+	mInterface.bus->beginTransmission(0x00);
+	mInterface.bus->endTransmission();
+	mInterface.bus->beginTransmission(0x00);
+	mInterface.bus->endTransmission();
+	//If the uC has problems with this sequence: reset TwoWire-module.
+	mInterface.bus->end();
+	mInterface.bus->begin();
 
 	delayMicroseconds(TLI493D_RESETDELAY);
 }
