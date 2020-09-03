@@ -16,6 +16,8 @@
 
 #include <Wire.h>       // default I²C library
 
+#define ADDRESS 0x35
+
 #define DELAY 500       // value in ms, change to modify update rate
 #define INT_PIN 9       // XMC pin connected to the sensor interrupt
 
@@ -32,7 +34,7 @@ void setup() {
   Wire.endTransmission();
 
   // Configure sensor
-  Wire.beginTransmission(0x35); // Sensor address
+  Wire.beginTransmission(ADDRESS); // Sensor address
   Wire.write(0x10);             // Register address
   Wire.write(0b00000000);       // Config register: measure all channels, full range, odd CP parity
   Wire.write(0b00011001);       // MOD1 register: master controlled mode, one byte read command, enabled interrupt, no collision avoidance, odd FP parity
@@ -48,7 +50,7 @@ void setup() {
   Serial.println("Bx By Bz T");
 
   // Trigger first measurement (empty write command with set trigger bits)
-  Wire.beginTransmission(0x35); // Sensor address
+  Wire.beginTransmission(ADDRESS); // Sensor address
   Wire.write(0b00100000);       // trigger after I2c write frame is finished
   Wire.endTransmission();
 }
@@ -59,7 +61,7 @@ void loop() {
     interrupt = false;
     // Readout the first 7 data bytes
     uint8_t buf[7];
-    Wire.requestFrom(0x35, 7);
+    Wire.requestFrom(ADDRESS, 7);
     for (uint8_t i = 0; i < 7; i++) {
       buf[i] = Wire.read();
     }
@@ -87,7 +89,7 @@ void loop() {
     delay(DELAY);
 
     // Trigger new measurement (empty write command with set trigger bits)
-    Wire.beginTransmission(0x35); // Sensor address
+    Wire.beginTransmission(ADDRESS); // Sensor address
     Wire.write(0b00100000);       // trigger after I2c write frame is finished
     Wire.endTransmission();
   }
