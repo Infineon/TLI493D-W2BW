@@ -18,6 +18,7 @@ env:
     matrix:
         - PLATFORMIO_CI_SRC=examples/Cartesian 
         - PLATFORMIO_CI_SRC=examples/Cartesian_low_power 
+        - PLATFORMIO_CI_SRC=examples/Raw_I2C_readout
         - PLATFORMIO_CI_SRC=examples/sine_generator 
 
 install:
