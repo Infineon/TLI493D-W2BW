@@ -1,6 +1,6 @@
 # TLI493D-W2BW - 3D magnetic sensor
 
-[![Build Status](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor.svg?branch=master)](https://travis-ci.org/Infineon/TLE493D-3DMagnetic-Sensor)
+[![Build Status](https://travis-ci.com/Infineon/TLI493D-W2BW.svg?branch=master)](https://travis-ci.com/Infineon/TLI493D-W2BW)
 
 <img src="https://github.com/Infineon/Assets/blob/master/Pictures/TLI493D-W2BW_sensor.jpg" height="300">
 
