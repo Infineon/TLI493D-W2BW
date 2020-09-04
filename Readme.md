@@ -16,7 +16,7 @@ The TLI493D-W2BW is a new wafer level package low power 3D magnetic sensor.
 
 ### Key features
 - 3D (X, Y, Z) magnetic flux density sensing of ±160 mT
-Programmable flux resolution down to typ. 65 µT
+Programmable flux resolution down to typ. 32.5 µT / LSB
 - Extremely small form factor: typ. 1.13 mm * 0.93 mm * 0.59 mm
 - X-Y angular measurement mode
 - Power down mode with 7 nA (typ.) power consumption
