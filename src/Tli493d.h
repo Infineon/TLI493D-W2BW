@@ -89,7 +89,7 @@ class Tli493d
 	 * @enum Range_e Enumerates the three available ranges; number 2 is reserved
 	 *		The full range is from -160mT to 160mT with a sensitivity of 7.7 LSB/mT.
 	 *		The short range is from -100mT to 100mT with a sensitivity of 15.4 LSB/mT.
-	 *		The extra short range is from -50mT to 50mT with a sensitivity of 30.8 LSB/mT. This is a special feature of the W2BW type.
+	 *		The extra short range is from -50mT to 50mT with a sensitivity of 30.8 LSB/mT. This is a special feature of the W2BW type, which does not work together with the Wake-Up-feature.
 	 */
 
 	
