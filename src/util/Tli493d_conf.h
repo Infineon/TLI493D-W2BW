@@ -49,7 +49,7 @@ enum Registers_e
 	TEMP1,
 	TEMP2,
 	ID, 							//diagnosis
-	P, FF, CF, T, PD3, PD0, FRM, 	//diagnosis (Diag)
+	P, FF, CF, T, PD_3, PD_0, FRM, 	//diagnosis (Diag)
 	XL, 							//wake up threshold MSBs
 	XH,
 	YL,

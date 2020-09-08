@@ -488,8 +488,8 @@ void Tli493d::readDiagnosis(uint8_t (&diag)[7])
 	diag[1] = getRegBits(tli493d::FF);
 	diag[2] = getRegBits(tli493d::CF);
 	diag[3] = getRegBits(tli493d::T);
-	diag[4] = getRegBits(tli493d::PD3);
-	diag[5] = getRegBits(tli493d::PD0);
+	diag[4] = getRegBits(tli493d::PD_3);
+	diag[5] = getRegBits(tli493d::PD_0);
 	diag[6] = getRegBits(tli493d::FRM);
 }
 void Tli493d::setRegBits(uint8_t regMaskIndex, uint8_t data)
