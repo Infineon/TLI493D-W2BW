@@ -1,0 +1,56 @@
+var classTli493d =
+[
+    [ "TypeAddress_e", "d8/d4b/classTli493d.html#a042d13a4cea8a701e8be27ee68d829fb", [
+      [ "TLI493D_A0", "d8/d4b/classTli493d.html#a042d13a4cea8a701e8be27ee68d829fbaf6ce40964226c82ecd5693096b6db981", null ],
+      [ "TLI493D_A1", "d8/d4b/classTli493d.html#a042d13a4cea8a701e8be27ee68d829fbaae9a2a256eed62bdca4aef113b6aba86", null ],
+      [ "TLI493D_A2", "d8/d4b/classTli493d.html#a042d13a4cea8a701e8be27ee68d829fba3c62c47849b05724475d920a05655b02", null ],
+      [ "TLI493D_A3", "d8/d4b/classTli493d.html#a042d13a4cea8a701e8be27ee68d829fba1f2707cb074517d8d529e8a080a47a7c", null ]
+    ] ],
+    [ "AccessMode_e", "d8/d4b/classTli493d.html#a4dc94885ca68af2c16b657c8c1e52e33", [
+      [ "LOWPOWERMODE", "d8/d4b/classTli493d.html#a4dc94885ca68af2c16b657c8c1e52e33a883c636de364ca1e09840dbdab86a137", null ],
+      [ "MASTERCONTROLLEDMODE", "d8/d4b/classTli493d.html#a4dc94885ca68af2c16b657c8c1e52e33acdd2e91641c82ae83db9c0a4f9f5c9a1", null ],
+      [ "FASTMODE", "d8/d4b/classTli493d.html#a4dc94885ca68af2c16b657c8c1e52e33a19e9f248f6db7ba0ff1d8f23d12e095f", null ]
+    ] ],
+    [ "Range_e", "d8/d4b/classTli493d.html#a55b74e5db7c9fa4457df4f9542e31409", [
+      [ "FULL", "d8/d4b/classTli493d.html#a55b74e5db7c9fa4457df4f9542e31409a6f69f0a1b473368c0fa4b0c433d76c43", null ],
+      [ "SHORT", "d8/d4b/classTli493d.html#a55b74e5db7c9fa4457df4f9542e31409a87426a7bd1bf22c05736ab65110640b0", null ],
+      [ "EXTRASHORT", "d8/d4b/classTli493d.html#a55b74e5db7c9fa4457df4f9542e31409a46019e44690af193885c8e5d4ef95c30", null ]
+    ] ],
+    [ "Tli493d", "d8/d4b/classTli493d.html#a3e2602961b8d5b0d0da0b8f8dd5c6fd7", null ],
+    [ "Tli493d", "d8/d4b/classTli493d.html#a0f8ad7746801e2138d86f75ec3f06faf", null ],
+    [ "~Tli493d", "d8/d4b/classTli493d.html#a6d9321dc8bb1656d5dfddcf1d8056867", null ],
+    [ "begin", "d8/d4b/classTli493d.html#ab9eec2487d3b0bfc8c29c01e44918dc7", null ],
+    [ "begin", "d8/d4b/classTli493d.html#a00a0b12ff333a815fddc3473bf3920e2", null ],
+    [ "begin", "d8/d4b/classTli493d.html#ab9844ce9af343d9a9e9e764a8ce29121", null ],
+    [ "setAccessMode", "d8/d4b/classTli493d.html#ac421900e5e86c5504405bfd5d8496c2e", null ],
+    [ "setTrigger", "d8/d4b/classTli493d.html#a7242ad50ecaad2ae0d18dffe4cd451f0", null ],
+    [ "enableTemp", "d8/d4b/classTli493d.html#af507afd95e69727b2f67471b51d0bde6", null ],
+    [ "disableTemp", "d8/d4b/classTli493d.html#a41b96df17403701e072fbde984e5801b", null ],
+    [ "enableBz", "d8/d4b/classTli493d.html#a444f42ddc658cb251117f7fb01b4303b", null ],
+    [ "disableBz", "d8/d4b/classTli493d.html#acc9cfa9794df71cae11fecf888f642d3", null ],
+    [ "setWakeUpThreshold", "d8/d4b/classTli493d.html#a859f54da0d9e856d5413e0d82f02fe8a", null ],
+    [ "setWakeUpThresholdLSB", "d8/d4b/classTli493d.html#a3cd77dbada80b303a5517f1819b52fa3", null ],
+    [ "setWakeUpThresholdMT", "d8/d4b/classTli493d.html#ae13f314e2d527d8d3d01939b1121dc39", null ],
+    [ "wakeUpEnabled", "d8/d4b/classTli493d.html#abca7fa1aa6952c3ffa14266834bbbb0b", null ],
+    [ "enableWakeUp", "d8/d4b/classTli493d.html#a47b6a2d9eab7e0e492edbf8fca834d99", null ],
+    [ "disableWakeUp", "d8/d4b/classTli493d.html#adf58a8fa3b18b5047ff42df9abf83f98", null ],
+    [ "setUpdateRate", "d8/d4b/classTli493d.html#a91816c37e7ed44b24c0b87062e75b7aa", null ],
+    [ "setMeasurementRange", "d8/d4b/classTli493d.html#a2c91389442c3c0f470e6cf4ccf6ad429", null ],
+    [ "updateData", "d8/d4b/classTli493d.html#a9114bee227a0e533d42eed8ce8661859", null ],
+    [ "getX", "d8/d4b/classTli493d.html#a8cfec35554e7ca1de94f10a33422ecd6", null ],
+    [ "getY", "d8/d4b/classTli493d.html#a1d689027ccd94f94aaae2488c81b29a0", null ],
+    [ "getZ", "d8/d4b/classTli493d.html#ab8ec5a6029162feced9b04806470198b", null ],
+    [ "getNorm", "d8/d4b/classTli493d.html#ae1e1e498c064abd1d2498f8270008927", null ],
+    [ "getAzimuth", "d8/d4b/classTli493d.html#afdffccd3ec48cddc90ab4a6ccad25f93", null ],
+    [ "getPolar", "d8/d4b/classTli493d.html#a95fc55176bd2f02ed50aec72637c48c1", null ],
+    [ "getTemp", "d8/d4b/classTli493d.html#ab92a5861beff6329de5f013d367a84cb", null ],
+    [ "resetSensor", "d8/d4b/classTli493d.html#a9a54058e6415d418c4f67f2cb873a6c3", null ],
+    [ "readDiagnosis", "d8/d4b/classTli493d.html#ae3f7edd32f041ebc686ba333576f2b67", null ],
+    [ "enableInterrupt", "d8/d4b/classTli493d.html#ad45e25240246ad77c63b6d1753c521e4", null ],
+    [ "disableInterrupt", "d8/d4b/classTli493d.html#af5bf9c6d29687a147e15eb25764f2460", null ],
+    [ "enableCollisionAvoidance", "d8/d4b/classTli493d.html#ae54b4a1bc248be2e9d944e7c84e2ce14", null ],
+    [ "disableCollisionAvoidance", "d8/d4b/classTli493d.html#a1c70c26d38f5e792058946659061e0aa", null ],
+    [ "setRegBits", "d8/d4b/classTli493d.html#a564e1bf6a87177c088ae84b3c8b5535d", null ],
+    [ "getRegBits", "d8/d4b/classTli493d.html#a8c1ade2d2c5b3f7c8278f904d9ee22c5", null ],
+    [ "mInterface", "d8/d4b/classTli493d.html#ace7dc8781be7b0940beb594bbc64659b", null ]
+];

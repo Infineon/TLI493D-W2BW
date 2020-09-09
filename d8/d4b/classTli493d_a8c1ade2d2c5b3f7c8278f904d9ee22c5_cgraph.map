@@ -1,0 +1,5 @@
+<map id="Tli493d::getRegBits" name="Tli493d::getRegBits">
+<area shape="rect" id="node2" href="$dd/ddc/namespacetli493d.html#acd53b5e81d8c376470ee2bfa7c7012ab" title="tli493d::getFromRegs" alt="" coords="196,5,352,32"/>
+<area shape="rect" id="node3" href="$d8/d4b/classTli493d.html#a564e1bf6a87177c088ae84b3c8b5535d" title="Stores new values into the bus interface; for this function to take effect the function writeOut() sh..." alt="" coords="203,56,345,83"/>
+<area shape="rect" id="node4" href="$dd/ddc/namespacetli493d.html#afb74ce1ad0745f35a001b3a09600f1ef" title="tli493d::setToRegs" alt="" coords="400,56,536,83"/>
+</map>

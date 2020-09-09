@@ -1,0 +1,8 @@
+<map id="Tli493d::begin" name="Tli493d::begin">
+<area shape="rect" id="node2" href="$dd/ddc/namespacetli493d.html#aaa81c834378ee906a5a99cfccd2ed3f5" title="tli493d::initInterface" alt="" coords="167,5,315,32"/>
+<area shape="rect" id="node3" href="$d8/d4b/classTli493d.html#a564e1bf6a87177c088ae84b3c8b5535d" title="Stores new values into the bus interface; for this function to take effect the function writeOut() sh..." alt="" coords="169,56,312,83"/>
+<area shape="rect" id="node5" href="$d8/d4b/classTli493d.html#a9a54058e6415d418c4f67f2cb873a6c3" title="Resets the sensor. " alt="" coords="164,107,317,133"/>
+<area shape="rect" id="node6" href="$dd/ddc/namespacetli493d.html#aa604bcf66a85005d9df06088077ca465" title="tli493d::writeOut" alt="" coords="177,157,304,184"/>
+<area shape="rect" id="node7" href="$dd/ddc/namespacetli493d.html#a8794091fbb1cada9ea295d3a7cf12e65" title="tli493d::readOut" alt="" coords="178,208,303,235"/>
+<area shape="rect" id="node4" href="$dd/ddc/namespacetli493d.html#afb74ce1ad0745f35a001b3a09600f1ef" title="tli493d::setToRegs" alt="" coords="365,56,501,83"/>
+</map>

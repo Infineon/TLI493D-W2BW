@@ -1,0 +1,5 @@
+<map id="Tli493d::disableWakeUp" name="Tli493d::disableWakeUp">
+<area shape="rect" id="node2" href="$d8/d4b/classTli493d.html#a564e1bf6a87177c088ae84b3c8b5535d" title="Stores new values into the bus interface; for this function to take effect the function writeOut() sh..." alt="" coords="224,5,367,32"/>
+<area shape="rect" id="node4" href="$dd/ddc/namespacetli493d.html#aa604bcf66a85005d9df06088077ca465" title="tli493d::writeOut" alt="" coords="232,56,359,83"/>
+<area shape="rect" id="node3" href="$dd/ddc/namespacetli493d.html#afb74ce1ad0745f35a001b3a09600f1ef" title="tli493d::setToRegs" alt="" coords="415,5,551,32"/>
+</map>

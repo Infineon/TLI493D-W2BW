@@ -1,0 +1,7 @@
+<map id="Tli493d::wakeUpEnabled" name="Tli493d::wakeUpEnabled">
+<area shape="rect" id="node2" href="$dd/ddc/namespacetli493d.html#a8794091fbb1cada9ea295d3a7cf12e65" title="tli493d::readOut" alt="" coords="238,5,363,32"/>
+<area shape="rect" id="node3" href="$d8/d4b/classTli493d.html#a8c1ade2d2c5b3f7c8278f904d9ee22c5" title="Returns the value of a register field. " alt="" coords="229,56,372,83"/>
+<area shape="rect" id="node4" href="$dd/ddc/namespacetli493d.html#acd53b5e81d8c376470ee2bfa7c7012ab" title="tli493d::getFromRegs" alt="" coords="420,31,576,57"/>
+<area shape="rect" id="node5" href="$d8/d4b/classTli493d.html#a564e1bf6a87177c088ae84b3c8b5535d" title="Stores new values into the bus interface; for this function to take effect the function writeOut() sh..." alt="" coords="427,81,569,108"/>
+<area shape="rect" id="node6" href="$dd/ddc/namespacetli493d.html#afb74ce1ad0745f35a001b3a09600f1ef" title="tli493d::setToRegs" alt="" coords="624,81,760,108"/>
+</map>
