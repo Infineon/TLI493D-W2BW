@@ -58,6 +58,8 @@ After the communication has been setup successfully by the _begin()_-command, th
 When the configuration was done, the sensor data can be read via _updateData()_.
 Afterwards _getBx()_, _getBy()_, _getBz()_ and _getTemp()_ calculate the magnetic field and temperature out of the raw sensor values.
 
+See following link for the full documentation of the library: [https://infineon.github.io/TLI493D-W2BW/](https://infineon.github.io/TLI493D-W2BW/)
+
 ## Installation
 ### Integration of XMC in Arduino IDE
 Please note that base of the Sensors 2GO is the XMC 2Go from Infineon. Therefore, please install (if not already done) also the [XMC-for-Arduino](https://github.com/Infineon/XMC-for-Arduino) implementation and choose afterwards **XMC2Go** from the **Tools**>**Board** menu in the Arduino IDE if working with this evaluation board.
