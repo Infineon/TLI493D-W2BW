@@ -21,7 +21,7 @@
 #define DELAY 500       // value in ms, change to modify update rate
 #define INT_PIN 9       // XMC pin connected to the sensor interrupt
 
-volatile bool interrupt = true;
+volatile bool interrupt = false;
 
 void setup() {
   // Init I2C peripheral
@@ -58,7 +58,6 @@ void setup() {
 void loop() {
   if(interrupt)
   {
-    interrupt = false;
     // Readout the first 7 data bytes
     uint8_t buf[7];
     Wire.requestFrom(ADDRESS, 7);
@@ -92,6 +91,8 @@ void loop() {
     Wire.beginTransmission(ADDRESS); // Sensor address
     Wire.write(0b00100000);       // trigger after I2c write frame is finished
     Wire.endTransmission();
+
+    interrupt = false;
   }
 }
 
