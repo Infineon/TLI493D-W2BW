@@ -260,6 +260,8 @@ bool Tli493d::setWakeUpThreshold(float xh_th, float xl_th, float yh_th, float yl
 	//write out registers
 	for(uint8_t i = tli493d::regMasks[tli493d::XL].byteAdress; i<=tli493d::regMasks[tli493d::ZL2].byteAdress; i++)
 		tli493d::writeOut(&mInterface, i);
+	
+	return ret;
 }
 
 bool Tli493d::setWakeUpThresholdLSB(int16_t xh_th, int16_t xl_th, int16_t yh_th, int16_t yl_th, int16_t zh_th, int16_t zl_th){
