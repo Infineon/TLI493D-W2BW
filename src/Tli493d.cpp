@@ -57,13 +57,13 @@ void Tli493d::begin(TwoWire &bus, TypeAddress_e slaveAddress, bool reset, uint8_
 	switch (mProductType)
 	{
 	case TLI493D_A1:
-		setRegBits(tli493d::IICadr, 0x01);
+		setRegBits(tli493d::IICadr, 0b01);
 		break;
 	case TLI493D_A2:
-		setRegBits(tli493d::IICadr, 0x10);
+		setRegBits(tli493d::IICadr, 0b10);
 		break;
 	case TLI493D_A3:
-		setRegBits(tli493d::IICadr, 0x11);
+		setRegBits(tli493d::IICadr, 0b11);
 		break;
 	default:
 		break;
