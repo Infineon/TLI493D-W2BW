@@ -1,3 +1,7 @@
+## Deprecation Notice
+> [!WARNING]  
+> This library is **deprecated** and no longer maintained. Please use our [XENSIV™ 3D Magnetic Sensor TLx493D Arduino Library](https://github.com/Infineon/arduino-xensiv-3d-magnetic-sensor-tlx493d) instead.
+
 # TLI493D-W2BW - 3D magnetic sensor
 
 [![Build Status](https://travis-ci.com/Infineon/TLI493D-W2BW.svg?branch=master)](https://travis-ci.com/Infineon/TLI493D-W2BW)
